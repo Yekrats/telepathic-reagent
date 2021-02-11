@@ -1,5 +1,17 @@
 (ns telepathic.logic)
 
+(def testdata
+  { :color-player {:win :purple, :lose :green},
+    :shape-player {:win :bacon, :lose :star},
+    :board [[:blue :circle]  [:green :bacon]  [:purple :circle] [:blue :plus]
+            [:orange :plus]  [:blue :star]    [:orange :circle] [:purple :star]
+            [:green :star]   [:orange :star]  [:blue :bacon]    [:purple :plus]
+            [:purple :bacon] [:green :circle] [:green :plus]    [:orange :bacon]],
+    :actions {:available [:col-north :ew-reverse :corner-counterclockwise :row-east],
+              :deck      [:row-west :col-south :ns-do-si-do :ns-reverse :ew-do-si-do
+                          :corner-clockwise]
+              :discard []}})
+
 (def players [:color-player :shape-player])
 
 (def colors [:purple :blue :green :orange])
@@ -62,6 +74,6 @@
 
 (defn initiate-actions []
   (let [deck (shuffle actions)]
-    {:available (take 4 deck)
-     :deck (nthrest deck 4)
+    {:available (vec (take 4 deck))
+     :deck (vec (nthrest deck 4))
      :discard []}))

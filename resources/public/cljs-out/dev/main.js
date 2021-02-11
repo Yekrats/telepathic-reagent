@@ -1,5 +1,5 @@
 import {npmDeps} from "./npm_deps.js";
-window.CLOSURE_UNCOMPILED_DEFINES = {"figwheel.repl.connect_url":"ws:\/\/localhost:9500\/figwheel-connect?fwprocess=e4f1f5&fwbuild=dev","cljs.core._STAR_target_STAR_":"bundle"};
+window.CLOSURE_UNCOMPILED_DEFINES = {"figwheel.repl.connect_url":"ws:\/\/localhost:9500\/figwheel-connect?fwprocess=45569f&fwbuild=dev","cljs.core._STAR_target_STAR_":"bundle"};
 window.CLOSURE_NO_DEPS = true;
 if(typeof goog == "undefined") document.write('<script src="/cljs-out/dev/goog/base.js"></script>');
 document.write('<script src="/cljs-out/dev/goog/deps.js"></script>');
