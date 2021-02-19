@@ -26,6 +26,7 @@
 
 (defn condition-cards [cards]
   (zipmap [:win :lose] (take 2 (shuffle cards))))
+
 (defn all-match?
   "Checks all the members of a set. If all match, return that value. Otherwise return nil."
   [set]
@@ -64,7 +65,7 @@
   "Do any row or column have a matching set [s] of 3?"
   [s] ((some-fn any-row-match? any-col-match?) s))
 
-(defn sls []                                                 ; A shuffled-legal-start for testing purposes.
+(defn sls  "A shuffled-legal-start of the tiles." []
   (loop [set (shuffle tiles) i 0]
     (if (or (not (any-rc-match? set)) (> i 100))
       (if (> i 99)
