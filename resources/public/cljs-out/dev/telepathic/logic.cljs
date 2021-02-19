@@ -1,4 +1,6 @@
-(ns telepathic.logic)
+(ns telepathic.logic
+  (:require            [clojure.string :as str])
+  )
 
 (def testdata
   { :color-player {:win :purple, :lose :green},
@@ -16,7 +18,7 @@
 
 (def colors [:purple :blue :green :orange])
 
-(def shapes [:plus :circle :star :bacon])
+(def shapes [:cross :circle :star :bacon])
 
 (def actions [:row-east :row-west :col-north :col-south
               :ew-do-si-do :ns-do-si-do :ew-reverse :ns-reverse
@@ -78,3 +80,40 @@
     {:available (vec (take 4 deck))
      :deck (vec (nthrest deck 4))
      :discard []}))
+
+
+(defn remove-action
+  "An action (key) is moved from the available area to the
+  discard pile of game-state (state). Returns the state, with the
+  key card moved to the discard pile."
+  [state key]
+  (let [available (-> state :actions :available)
+        index (.indexOf available key) ; Check if key is in the available actions.
+        discard (-> state :actions :discard)]
+
+    (if (= index -1) state ; If key is not found, just return the state.
+        (-> state
+            ; Otherwise, remove the action card at the index.
+            (assoc-in [:actions :available] (vec (concat (subvec available 0 index)
+                                                         (subvec available (inc index)))))
+            ; Add the key to the end of the discard.
+            (assoc-in [:actions :discard] (conj discard key))))))
+
+(defn draw-action
+  "Take the top card from the action deck of the game state (state), and put it on the bottom
+  of the available pile.  Returns the new state."
+  [state]
+  (let [available (-> state :actions :available) ; Available action cards.
+        top-card (-> state :actions :deck first) ; Top card of draw deck.
+        rest-of-deck (-> state :actions :deck rest vec)] ; Rest of the draw deck.
+
+    (-> state
+        ; The new deck is all but the top card. I.e. the rest of the deck.
+        (assoc-in [:actions :deck] rest-of-deck)
+        ; The new available pile adds the top card to the available cards.
+        (assoc-in [:actions :available] (conj available top-card)))))
+
+(defn asset-name
+  "Takes in a key-pair (color & shape). Returns the name of the asset." ; :green :bacon => "Green Bacon.png"
+  [[c s]]
+  (str (str/capitalize (name c)) "%20" (str/capitalize (name s)) ".png"))

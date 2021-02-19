@@ -4,11 +4,9 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
-   [telepathic.logic :refer [condition-cards colors shapes initiate-actions sls]]))
+   [telepathic.logic :refer [condition-cards colors shapes initiate-actions sls asset-name]]))
 
 (println "This text is printed from src/telepathic/core.cljs. Go ahead and edit it and see reloading in action.")
-
-(defn multiply [a b] (* a b))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce app-state (atom {:color-player (condition-cards colors)
@@ -23,7 +21,10 @@
 (defn hello-world []
   [:div
    [:h1 (pprint @app-state)]
-   [:h3 "Edit this in src/telepathic/core.cljs and watch it change!"]])
+   [:h3 "Edit this in src/telepathic/core.cljs and watch it change!"]
+   [:table (map (fn [row] [:tr (map (fn [card] [:td [:img {:src (str "/images/" (asset-name card ))
+                                                           :class "card-image"}]]) row)])
+                                    (partition 4 (:board @app-state)))]])
 
 (defn mount [el]
   (rdom/render [hello-world] el))

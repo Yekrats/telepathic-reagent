@@ -140,7 +140,7 @@ goog.addDependency("../devtools/preload.js", ['devtools.preload'], ['cljs.core',
 goog.addDependency("../cljs/test.js", ['cljs.test'], ['cljs.core', 'cljs.pprint', 'clojure.string']);
 goog.addDependency("../figwheel/main/async_result.js", ['figwheel.main.async_result'], ['cljs.core', 'figwheel.repl']);
 goog.addDependency("../figwheel/main/testing.js", ['figwheel.main.testing'], ['goog.dom', 'cljs.core', 'cljs.test', 'clojure.string', 'figwheel.main.async_result']);
-goog.addDependency("../telepathic/logic.js", ['telepathic.logic'], ['cljs.core']);
+goog.addDependency("../telepathic/logic.js", ['telepathic.logic'], ['cljs.core', 'clojure.string']);
 goog.addDependency("../reagent/impl/util.js", ['reagent.impl.util'], ['cljs.core', 'clojure.string']);
 goog.addDependency("../reagent/debug.js", ['reagent.debug'], ['cljs.core']);
 goog.addDependency("../reagent/impl/batching.js", ['reagent.impl.batching'], ['reagent.impl.util', 'cljs.core', 'reagent.debug']);

@@ -1,4 +1,6 @@
-(ns telepathic.logic)
+(ns telepathic.logic
+  (:require            [clojure.string :as str])
+  )
 
 (def testdata
   { :color-player {:win :purple, :lose :green},
@@ -16,7 +18,7 @@
 
 (def colors [:purple :blue :green :orange])
 
-(def shapes [:plus :circle :star :bacon])
+(def shapes [:cross :circle :star :bacon])
 
 (def actions [:row-east :row-west :col-north :col-south
               :ew-do-si-do :ns-do-si-do :ew-reverse :ns-reverse
@@ -110,3 +112,8 @@
         (assoc-in [:actions :deck] rest-of-deck)
         ; The new available pile adds the top card to the available cards.
         (assoc-in [:actions :available] (conj available top-card)))))
+
+(defn asset-name
+  "Takes in a key-pair (color & shape). Returns the name of the asset." ; :green :bacon => "Green Bacon.png"
+  [[c s]]
+  (str (str/capitalize (name c)) "%20" (str/capitalize (name s)) ".png"))

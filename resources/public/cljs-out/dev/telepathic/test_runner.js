@@ -5,14 +5,14 @@ goog.require('telepathic.core_test');
 goog.require('figwheel.main.testing');
 telepathic.test_runner._main = (function telepathic$test_runner$_main(var_args){
 var args__4742__auto__ = [];
-var len__4736__auto___15302 = arguments.length;
-var i__4737__auto___15303 = (0);
+var len__4736__auto___15577 = arguments.length;
+var i__4737__auto___15578 = (0);
 while(true){
-if((i__4737__auto___15303 < len__4736__auto___15302)){
-args__4742__auto__.push((arguments[i__4737__auto___15303]));
+if((i__4737__auto___15578 < len__4736__auto___15577)){
+args__4742__auto__.push((arguments[i__4737__auto___15578]));
 
-var G__15304 = (i__4737__auto___15303 + (1));
-i__4737__auto___15303 = G__15304;
+var G__15579 = (i__4737__auto___15578 + (1));
+i__4737__auto___15578 = G__15579;
 continue;
 } else {
 }
@@ -26,32 +26,32 @@ return telepathic.test_runner._main.cljs$core$IFn$_invoke$arity$variadic(argseq_
 (telepathic.test_runner._main.cljs$core$IFn$_invoke$arity$variadic = (function (args){
 figwheel.main.testing.system_exit_on_fail.call(null);
 
-var reporter__6125__auto___15305 = new cljs.core.Keyword(null,"reporter","reporter",-805360621).cljs$core$IFn$_invoke$arity$1(cljs.test.empty_env.call(null));
-if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword("cljs-test-display.core","default","cljs-test-display.core/default",-853427213),null,new cljs.core.Keyword("cljs.test","default","cljs.test/default",-1581405322),null], null), null).call(null,reporter__6125__auto___15305))){
+var reporter__6125__auto___15580 = new cljs.core.Keyword(null,"reporter","reporter",-805360621).cljs$core$IFn$_invoke$arity$1(cljs.test.empty_env.call(null));
+if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword("cljs-test-display.core","default","cljs-test-display.core/default",-853427213),null,new cljs.core.Keyword("cljs.test","default","cljs.test/default",-1581405322),null], null), null).call(null,reporter__6125__auto___15580))){
 } else {
-cljs.core._add_method.call(null,cljs.test.report,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [reporter__6125__auto___15305,new cljs.core.Keyword(null,"end-run-tests","end-run-tests",267300563)], null),(function (m__6126__auto__){
+cljs.core._add_method.call(null,cljs.test.report,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [reporter__6125__auto___15580,new cljs.core.Keyword(null,"end-run-tests","end-run-tests",267300563)], null),(function (m__6126__auto__){
 return cljs.core.reset_BANG_.call(null,figwheel.main.testing.test_result_data,m__6126__auto__);
 }));
 }
 
-cljs.test.run_block.call(null,(function (){var env15300 = cljs.test.empty_env.call(null);
-var summary15301 = cljs.core.volatile_BANG_.call(null,new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"summary","summary",380847952),new cljs.core.Keyword(null,"fail","fail",1706214930),(0),new cljs.core.Keyword(null,"error","error",-978969032),(0),new cljs.core.Keyword(null,"pass","pass",1574159993),(0),new cljs.core.Keyword(null,"test","test",577538877),(0)], null));
+cljs.test.run_block.call(null,(function (){var env15575 = cljs.test.empty_env.call(null);
+var summary15576 = cljs.core.volatile_BANG_.call(null,new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"summary","summary",380847952),new cljs.core.Keyword(null,"fail","fail",1706214930),(0),new cljs.core.Keyword(null,"error","error",-978969032),(0),new cljs.core.Keyword(null,"pass","pass",1574159993),(0),new cljs.core.Keyword(null,"test","test",577538877),(0)], null));
 return cljs.core.concat.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
-cljs.test.set_env_BANG_.call(null,env15300);
+cljs.test.set_env_BANG_.call(null,env15575);
 
-cljs.test.do_report.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Symbol(null,"telepathic.core-test","telepathic.core-test",170080184,null),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"begin-test-ns","begin-test-ns",-1701237033)], null));
+cljs.test.do_report.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Symbol(null,"telepathic.test-runner","telepathic.test-runner",-147134926,null),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"begin-test-ns","begin-test-ns",-1701237033)], null));
 
-return cljs.test.block.call(null,(function (){var env__10013__auto__ = cljs.test.get_current_env.call(null);
+return cljs.test.block.call(null,(function (){var env__10187__auto__ = cljs.test.get_current_env.call(null);
 return cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
-if((env__10013__auto__ == null)){
+if((env__10187__auto__ == null)){
 cljs.test.set_env_BANG_.call(null,cljs.test.empty_env.call(null));
 } else {
 }
 
 
 return null;
-})], null),cljs.test.test_vars_block.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Var(function(){return telepathic.core_test.multiply_test;},new cljs.core.Symbol("telepathic.core-test","multiply-test","telepathic.core-test/multiply-test",575232355,null),cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Keyword(null,"name","name",1843675177),new cljs.core.Keyword(null,"file","file",-1269645878),new cljs.core.Keyword(null,"end-column","end-column",1425389514),new cljs.core.Keyword(null,"column","column",2078222095),new cljs.core.Keyword(null,"line","line",212345235),new cljs.core.Keyword(null,"end-line","end-line",1837326455),new cljs.core.Keyword(null,"arglists","arglists",1661989754),new cljs.core.Keyword(null,"doc","doc",1913296891),new cljs.core.Keyword(null,"test","test",577538877)],[new cljs.core.Symbol(null,"telepathic.core-test","telepathic.core-test",170080184,null),new cljs.core.Symbol(null,"multiply-test","multiply-test",373518316,null),"/Users/scotto/code/personal/clojure-lunch-bytes/telepathic/test/telepathic/core_test.cljs",23,1,6,6,cljs.core.List.EMPTY,null,(cljs.core.truth_(telepathic.core_test.multiply_test)?telepathic.core_test.multiply_test.cljs$lang$test:null)])),new cljs.core.Var(function(){return telepathic.core_test.multiply_test_2;},new cljs.core.Symbol("telepathic.core-test","multiply-test-2","telepathic.core-test/multiply-test-2",1793235229,null),cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Keyword(null,"name","name",1843675177),new cljs.core.Keyword(null,"file","file",-1269645878),new cljs.core.Keyword(null,"end-column","end-column",1425389514),new cljs.core.Keyword(null,"column","column",2078222095),new cljs.core.Keyword(null,"line","line",212345235),new cljs.core.Keyword(null,"end-line","end-line",1837326455),new cljs.core.Keyword(null,"arglists","arglists",1661989754),new cljs.core.Keyword(null,"doc","doc",1913296891),new cljs.core.Keyword(null,"test","test",577538877)],[new cljs.core.Symbol(null,"telepathic.core-test","telepathic.core-test",170080184,null),new cljs.core.Symbol(null,"multiply-test-2","multiply-test-2",2128120474,null),"/Users/scotto/code/personal/clojure-lunch-bytes/telepathic/test/telepathic/core_test.cljs",25,1,9,9,cljs.core.List.EMPTY,null,(cljs.core.truth_(telepathic.core_test.multiply_test_2)?telepathic.core_test.multiply_test_2.cljs$lang$test:null)]))], null)),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
-if((env__10013__auto__ == null)){
+})], null),cljs.test.test_vars_block.call(null,cljs.core.PersistentVector.EMPTY),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
+if((env__10187__auto__ == null)){
 return cljs.test.clear_env_BANG_.call(null);
 } else {
 return null;
@@ -59,15 +59,15 @@ return null;
 })], null));
 })());
 }),(function (){
-return cljs.test.do_report.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Symbol(null,"telepathic.core-test","telepathic.core-test",170080184,null),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"end-test-ns","end-test-ns",1620675645)], null));
+return cljs.test.do_report.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"ns","ns",441598760),new cljs.core.Symbol(null,"telepathic.test-runner","telepathic.test-runner",-147134926,null),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"end-test-ns","end-test-ns",1620675645)], null));
 })], null),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
-return cljs.core._vreset_BANG_.call(null,summary15301,cljs.core.partial.call(null,cljs.core.merge_with,cljs.core._PLUS_).call(null,cljs.core._deref.call(null,summary15301),new cljs.core.Keyword(null,"report-counters","report-counters",-1702609242).cljs$core$IFn$_invoke$arity$1(cljs.test.get_and_clear_env_BANG_.call(null))));
+return cljs.core._vreset_BANG_.call(null,summary15576,cljs.core.partial.call(null,cljs.core.merge_with,cljs.core._PLUS_).call(null,cljs.core._deref.call(null,summary15576),new cljs.core.Keyword(null,"report-counters","report-counters",-1702609242).cljs$core$IFn$_invoke$arity$1(cljs.test.get_and_clear_env_BANG_.call(null))));
 })], null)),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){
-cljs.test.set_env_BANG_.call(null,env15300);
+cljs.test.set_env_BANG_.call(null,env15575);
 
-cljs.test.do_report.call(null,cljs.core.deref.call(null,summary15301));
+cljs.test.do_report.call(null,cljs.core.deref.call(null,summary15576));
 
-cljs.test.report.call(null,cljs.core.assoc.call(null,cljs.core.deref.call(null,summary15301),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"end-run-tests","end-run-tests",267300563)));
+cljs.test.report.call(null,cljs.core.assoc.call(null,cljs.core.deref.call(null,summary15576),new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"end-run-tests","end-run-tests",267300563)));
 
 return cljs.test.clear_env_BANG_.call(null);
 })], null));
@@ -79,9 +79,9 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 (telepathic.test_runner._main.cljs$lang$maxFixedArity = (0));
 
 /** @this {Function} */
-(telepathic.test_runner._main.cljs$lang$applyTo = (function (seq15299){
+(telepathic.test_runner._main.cljs$lang$applyTo = (function (seq15574){
 var self__4724__auto__ = this;
-return self__4724__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq15299));
+return self__4724__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq15574));
 }));
 
 
