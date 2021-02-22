@@ -5,14 +5,15 @@
 (def testdata
   { :color-player {:win :purple, :lose :green},
     :shape-player {:win :bacon, :lose :star},
-    :board [[:blue :circle]  [:green :bacon]  [:purple :circle] [:blue :plus]
-            [:orange :plus]  [:blue :star]    [:orange :circle] [:purple :star]
-            [:green :star]   [:orange :star]  [:blue :bacon]    [:purple :plus]
-            [:purple :bacon] [:green :circle] [:green :plus]    [:orange :bacon]],
+    :board [[:blue :circle]  [:green :bacon]  [:purple :circle] [:blue :cross]
+            [:orange :cross] [:blue :star]    [:orange :circle] [:purple :star]
+            [:green :star]   [:orange :star]  [:blue :bacon]    [:purple :cross]
+            [:purple :bacon] [:green :circle] [:green :cross]   [:orange :bacon]],
     :actions {:available [:col-north :ew-reverse :corner-counterclockwise :row-east],
               :deck      [:row-west :col-south :ns-do-si-do :ns-reverse :ew-do-si-do
                           :corner-clockwise]
-              :discard []}})
+              :discard []}
+    :current-player :color-player})
 
 (def players [:color-player :shape-player])
 
