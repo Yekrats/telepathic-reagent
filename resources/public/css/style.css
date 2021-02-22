@@ -1,2 +1,4 @@
 /* some style */
-.card-image { width: 50px; }
+.card-image { width: 150px; }
+#action-cards { margin-left: 50px; }
+.action-card { margin: 4px; }
