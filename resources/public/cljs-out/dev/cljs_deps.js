@@ -152,9 +152,4 @@ goog.addDependency("../reagent/core.js", ['reagent.core'], ['reagent.impl.util',
 goog.addDependency("../telepathic/core.js", ['telepathic.core'], ['goog.dom', 'telepathic.logic', 'reagent.core', 'cljs.core', 'cljs.pprint', 'reagent.dom']);
 goog.addDependency("../telepathic/core_test.js", ['telepathic.core_test'], ['telepathic.core', 'cljs.core', 'cljs.test']);
 goog.addDependency("../telepathic/test_runner.js", ['telepathic.test_runner'], ['cljs.core', 'figwheel.main.testing', 'telepathic.core_test']);
-goog.addDependency("dom/classlist.js", ['goog.dom.classlist'], ['goog.array']);
-goog.addDependency("../cljs_test_display/favicon.js", ['cljs_test_display.favicon'], ['goog.dom', 'cljs.core', 'goog.object', 'clojure.string']);
-goog.addDependency("../cljs_test_display/notify.js", ['cljs_test_display.notify'], ['cljs.core', 'goog.object', 'cljs_test_display.favicon']);
-goog.addDependency("events/keycodes.js", ['goog.events.KeyCodes'], ['goog.userAgent']);
-goog.addDependency("../cljs_test_display/core.js", ['cljs_test_display.core'], ['goog.dom', 'goog.dom.classlist', 'cljs_test_display.notify', 'cljs.core', 'cljs.test', 'goog.events.EventType', 'cljs_test_display.favicon', 'clojure.string', 'goog.events.KeyCodes', 'goog.events']);
-goog.addDependency("../figwheel/main/generated/dev_auto_test_runner.js", ['figwheel.main.generated.dev_auto_test_runner'], ['cljs.core', 'cljs.test', 'telepathic.core_test', 'cljs_test_display.core']);
+goog.addDependency("../figwheel/main/generated/dev_auto_test_runner.js", ['figwheel.main.generated.dev_auto_test_runner'], ['cljs.core', 'figwheel.main.testing']);
