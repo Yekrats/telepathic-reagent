@@ -1,4 +1,4 @@
-(ns telepathic.logic
+  (ns telepathic.logic
   (:require            [clojure.string :as str])
   )
 
@@ -114,7 +114,12 @@
         ; The new available pile adds the top card to the available cards.
         (assoc-in [:actions :available] (conj available top-card)))))
 
-(defn asset-name
+(defn tile-asset
   "Takes in a key-pair (color & shape). Returns the name of the asset." ; :green :bacon => "Green Bacon.png"
   [[c s]]
-  (str (str/capitalize (name c)) "%20" (str/capitalize (name s)) ".png"))
+  (str "/images/" (str/capitalize (name c)) "%20" (str/capitalize (name s)) ".png"))
+
+(defn condition-asset
+  ""
+  [key]
+  (str "/images/" (name key) "-condition.png"))

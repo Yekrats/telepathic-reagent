@@ -1,4 +1,21 @@
 /* some style */
-.card-image { width: 150px; }
+.card-image { width: 150px; height: 150px; }
 #action-cards { margin-left: 50px; }
 .action-card { margin: 4px; }
+.condition-cards {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 50px;
+}
+.condition-front {
+	display: none;
+}
+
+.condition-card:hover .condition-front {
+	display: block;
+}
+
+.condition-card:hover .condition-back {
+	display: none;
+}

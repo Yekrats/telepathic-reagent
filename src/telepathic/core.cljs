@@ -4,7 +4,7 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
-   [telepathic.logic :refer [condition-cards colors shapes initiate-actions sls asset-name]]))
+   [telepathic.logic :refer [condition-cards colors shapes initiate-actions sls tile-asset condition-asset]]))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce app-state (atom
@@ -25,7 +25,7 @@
                    [:tr {:key row-index}
                     (map-indexed (fn [col-index card]
                                    [:td {:key col-index}
-                                    [:img {:src (str "/images/" (asset-name card))
+                                    [:img {:src (tile-asset card)
                                            :class "card-image"}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
@@ -46,19 +46,39 @@
 (defn render-color-player
   "Render the condition cards for the color player from state."
   []
-  (str (:color-player @app-state)))
+  [:<>
+   [:div {:class "condition-card"}
+    [:img {:src "/images/color-win.png"
+           :class "card-image condition-back"}]
+    [:img {:src (condition-asset (-> @app-state :color-player :win))
+           :class "card-image condition-front"}]]
+   [:div {:class "condition-card"}
+    [:img {:src "/images/color-lose.png"
+           :class "card-image condition-back"}]
+    [:img {:src (condition-asset (-> @app-state :color-player :lose))
+           :class "card-image condition-front"}]]])
 
 (defn render-shape-player
   "Render the condition cards for the shape playre from state."
   []
-  (str (:shape-player @app-state)))
+  [:<>
+   [:div {:class "condition-card"}
+    [:img {:src "/images/shape-win.png"
+           :class "card-image condition-back"}]
+    [:img {:src (condition-asset (-> @app-state :shape-player :win))
+           :class "card-image condition-front"}]]
+   [:div {:class "condition-card"}
+    [:img {:src "/images/shape-lose.png"
+           :class "card-image condition-back"}]
+    [:img {:src (condition-asset (-> @app-state :shape-player :lose))
+           :class "card-image condition-front"}]]])
 
 (defn render-game []
   [:<>
    [:div {:style {:display "flex"}}
     (render-board)
     (render-actions)]
-   [:div
+   [:div {:class "condition-cards"}
     (render-color-player)
     (render-shape-player)]])
 
