@@ -13,7 +13,9 @@
               :deck      [:row-west :col-south :ns-do-si-do :ns-reverse :ew-do-si-do
                           :corner-clockwise]
               :discard []}
-    :current-player :color-player})
+    :current-player :color-player
+    :selected-action nil
+   })
 
 (def players [:color-player :shape-player])
 

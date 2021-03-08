@@ -11,7 +11,8 @@
                     {:color-player (condition-cards colors)
                      :shape-player (condition-cards shapes)
                      :board (sls)
-                     :actions (initiate-actions)}))
+                     :actions (initiate-actions)
+                     :selected-action nil}))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -33,14 +34,15 @@
 (defn render-actions
   "Render the four current actions from state."
   []
-  [:div {:id "action-cards"
-         :style
-         {:display "flex"
-          :flex-direction "column"}}
+  [:div {:id "action-cards" }
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
-                         :class "card-image action-card"
-                         :key index}])
+                         :class (str (when (= (:selected-action @app-state) action) "selected-action-card ") "card-image action-card")
+                         :key index
+                         :onClick (fn [_] (swap! app-state #(assoc @app-state :selected-action action) ) (pprint @app-state))
+                         }])
+
+
                 (-> @app-state :actions :available))])
 
 (defn render-color-player
@@ -75,12 +77,16 @@
 
 (defn render-game []
   [:<>
-   [:div {:style {:display "flex"}}
+   [:div {:class "row" }
     (render-board)
     (render-actions)]
-   [:div {:class "condition-cards"}
+   (when (some? (:selected-action @app-state))
+     [:div {:class "row"}
+      [:button "Confirm"]])
+   [:div {:class "row"}
     (render-color-player)
-    (render-shape-player)]])
+    (render-shape-player)]]
+  )
 
 (defn mount [el]
   (rdom/render [render-game] el))
