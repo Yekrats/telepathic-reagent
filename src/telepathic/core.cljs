@@ -12,7 +12,8 @@
                      :shape-player (condition-cards shapes)
                      :board (sls)
                      :actions (initiate-actions)
-                     :selected-action nil}))
+                     :selected-action nil
+                     :action-confirmed nil }))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -43,7 +44,9 @@
                          }])
 
 
-                (-> @app-state :actions :available))])
+                (filter #(or  (not (:action-confirmed @app-state))
+                             (= (:selected-action @app-state) %) )
+                        (-> @app-state :actions :available)))])
 
 (defn render-color-player
   "Render the condition cards for the color player from state."
@@ -80,9 +83,10 @@
    [:div {:class "row" }
     (render-board)
     (render-actions)]
-   (when (some? (:selected-action @app-state))
+   (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
      [:div {:class "row"}
-      [:button "Confirm"]])
+      [:button  {  :onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true)))}
+                "Confirm"      ]])
    [:div {:class "row"}
     (render-color-player)
     (render-shape-player)]]
