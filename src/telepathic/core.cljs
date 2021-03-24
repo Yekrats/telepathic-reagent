@@ -4,7 +4,7 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
-   [telepathic.logic :refer [condition-cards colors shapes initiate-actions sls tile-asset condition-asset]]))
+   [telepathic.logic :refer [condition-asset condition-cards colors initiate-actions shapes sls tile-asset]]))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce app-state (atom
@@ -13,7 +13,7 @@
                      :board (sls)
                      :actions (initiate-actions)
                      :selected-action nil
-                     :action-confirmed nil }))
+                     :action-confirmed nil}))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -40,12 +40,9 @@
                   [:img {:src (str "/images/" (name action) ".png")
                          :class (str (when (= (:selected-action @app-state) action) "selected-action-card ") "card-image action-card")
                          :key index
-                         :onClick (fn [_] (swap! app-state #(assoc @app-state :selected-action action) ) (pprint @app-state))
-                         }])
-
-
-                (filter #(or  (not (:action-confirmed @app-state))
-                             (= (:selected-action @app-state) %) )
+                         :onClick (fn [_] (swap! app-state #(assoc @app-state :selected-action action)))}])
+                (filter #(or (not (:action-confirmed @app-state))
+                             (= (:selected-action @app-state) %))
                         (-> @app-state :actions :available)))])
 
 (defn render-color-player
@@ -64,7 +61,7 @@
            :class "card-image condition-front"}]]])
 
 (defn render-shape-player
-  "Render the condition cards for the shape playre from state."
+  "Render the condition cards for the shape player from state."
   []
   [:<>
    [:div {:class "condition-card"}
@@ -80,17 +77,17 @@
 
 (defn render-game []
   [:<>
-   [:div {:class "row" }
+   [:div {:class "row"}
     (render-board)
     (render-actions)]
    (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
      [:div {:class "row"}
-      [:button  {  :onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true)))}
-                "Confirm"      ]])
+      [:button
+       {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true)))}
+       "Confirm"]])
    [:div {:class "row"}
     (render-color-player)
-    (render-shape-player)]]
-  )
+    (render-shape-player)]])
 
 (defn mount [el]
   (rdom/render [render-game] el))
