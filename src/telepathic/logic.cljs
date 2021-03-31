@@ -1,6 +1,7 @@
-  (ns telepathic.logic
-  (:require            [clojure.string :as str])
-  )
+(ns telepathic.logic
+  (:require            [clojure.string :as str]
+                       [cljs.pprint :refer [pprint]]
+))
 
 (def testdata
   { :color-player {:win :purple, :lose :green},
@@ -136,7 +137,7 @@
   [[%1 %2 %3 %4]]
   (seq [%2 %3 %4 %1]))
 
-(defn push-one-row-east
+(defn row-east
   "Takes in a set of 16 tiles (s), and pushes one 'rownum' to the east."
   [s rownum]
   (vec (apply concat (for [i (range 4)]
@@ -144,7 +145,7 @@
                          (push-one-row-forwards (take 4 (drop (* i 4) s)))
                          (take 4 (drop (* i 4) s)))))))
 
-(defn push-one-row-west
+(defn row-west
   "Takes in a set of 16 tiles (s), and pushes one 'rownum' to the west."
   [s rownum]
   (vec (apply concat (for [i (range 4)]
@@ -152,13 +153,13 @@
                          (push-one-row-backwards (take 4 (drop (* i 4) s)))
                          (take 4 (drop (* i 4) s)))))))
 
-(defn push-one-row-north   "Takes in a set of 16 tiles, and pushes one 'colnum' to the north."
+(defn col-north   "Takes in a set of 16 tiles, and pushes one 'colnum' to the north."
   [s colnum]
-  (rot-90 (push-one-row-west (rot-90 s) colnum)))
+  (rot-90 (row-west (rot-90 s) colnum)))
 
-(defn push-one-row-south   "Takes in a set of 16 tiles, and pushes one 'colnum' to the south."
+(defn col-south   "Takes in a set of 16 tiles, and pushes one 'colnum' to the south."
   [s colnum]
-  (rot-90 (push-one-row-east (rot-90 s) colnum)))
+  (rot-90 (row-east (rot-90 s) colnum)))
 
 (defn ew-reverse
   "Takes in a set of 16 tiles (s), and reverses one east-west row."
@@ -221,7 +222,17 @@
 	;; Rotate the whole board back to its original position
 	  (nth (iterate rotate-board-clockwise rotated-rotated) n)))
 
-(defn define-cell
+(defn corner-clockwise
+  ""
+  [s quad]
+  (rotate-quad s quad rotate-quad0-clockwise))
+
+(defn corner-counterclockwise
+  ""
+  [s quad]
+  (rotate-quad s quad rotate-quad0-counterclockwise))
+
+(defn define-target
   "Input a cell number 0-15; return a map of the row, column, and quad."
   [cell-num]
    {:row (int (Math/floor (/ cell-num 4)))
@@ -231,3 +242,12 @@
             4 0   5 0   6 1   7 1
             8 3   9 3   10 2  11 2
             12 3  13 3  14 2     2)})
+
+(defn do-action
+  [s target action]
+  (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
+        target-arg (cond
+                     (some #(= action %) '(:row-east :row-west :ew-do-si-do :ew-reverse)) (:row target)
+                     (some #(= action %) '(:col-north :col-south :ns-do-si-do :ns-reverse)) (:column target)
+                     :else (:quad target))]
+    (function s target-arg)))

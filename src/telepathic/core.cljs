@@ -4,7 +4,7 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
-   [telepathic.logic :refer [condition-asset condition-cards colors initiate-actions shapes sls tile-asset]]))
+   [telepathic.logic :refer [condition-asset condition-cards colors define-target initiate-actions shapes sls tile-asset]]))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce app-state (atom
@@ -27,8 +27,10 @@
                    [:tr {:key row-index}
                     (map-indexed (fn [col-index card]
                                    [:td {:key col-index}
-                                    [:img {:src (tile-asset card)
-                                           :class "card-image"}]])
+                                    [:img {:src     (tile-asset card)
+                                           :class   "card-image"
+                                           :onClick (fn [_]
+                                                      (js/console.log (pprint (define-target (+ (* row-index 4) col-index)))))}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
 
