@@ -1,6 +1,7 @@
-  (ns telepathic.logic
-  (:require            [clojure.string :as str])
-  )
+(ns telepathic.logic
+  (:require            [clojure.string :as str]
+                       [cljs.pprint :refer [pprint]]
+))
 
 (def testdata
   { :color-player {:win :purple, :lose :green},
@@ -125,3 +126,128 @@
   ""
   [key]
   (str "/images/" (name key) "-condition.png"))
+
+(defn push-one-row-forwards
+  "Inputs a set of 4, outputs set pushed by one."
+  [[%1 %2 %3 %4]]
+  (seq [%4 %1 %2 %3]))
+
+(defn push-one-row-backwards
+  "Inputs a set of 4, outputs set pushed backwards by one."
+  [[%1 %2 %3 %4]]
+  (seq [%2 %3 %4 %1]))
+
+(defn row-east
+  "Takes in a set of 16 tiles (s), and pushes one 'rownum' to the east."
+  [s rownum]
+  (vec (apply concat (for [i (range 4)]
+                       (if (= i rownum)
+                         (push-one-row-forwards (take 4 (drop (* i 4) s)))
+                         (take 4 (drop (* i 4) s)))))))
+
+(defn row-west
+  "Takes in a set of 16 tiles (s), and pushes one 'rownum' to the west."
+  [s rownum]
+  (vec (apply concat (for [i (range 4)]
+                       (if (= i rownum)
+                         (push-one-row-backwards (take 4 (drop (* i 4) s)))
+                         (take 4 (drop (* i 4) s)))))))
+
+(defn col-north   "Takes in a set of 16 tiles, and pushes one 'colnum' to the north."
+  [s colnum]
+  (rot-90 (row-west (rot-90 s) colnum)))
+
+(defn col-south   "Takes in a set of 16 tiles, and pushes one 'colnum' to the south."
+  [s colnum]
+  (rot-90 (row-east (rot-90 s) colnum)))
+
+(defn ew-reverse
+  "Takes in a set of 16 tiles (s), and reverses one east-west row."
+  [s rownum]
+  (vec (apply concat (for [i (range 4)]
+                       (if (= i rownum)
+                         (reverse (take 4 (drop (* i 4) s)))
+                         (take 4 (drop (* i 4) s)))))))
+
+(defn ns-reverse   "Takes in a set of 16 tiles, and reverses one north-south column."
+  [s colnum]
+  (rot-90 (ew-reverse (rot-90 s) colnum)))
+
+(defn do-si-do "Inputs a set of 4. Outputs the same set with each pair reversed."
+  [[%1 %2 %3 %4]]
+   (seq [%2 %1 %4 %3]))
+
+(defn ew-do-si-do
+  "Takes in a set of 16 tiles (s), and performs do-si-do one east-west row."
+  [s rownum]
+  (vec (apply concat (for [i (range 4)]
+                       (if (= i rownum)
+                         (do-si-do (take 4 (drop (* i 4) s)))
+                         (take 4 (drop (* i 4) s)))))))
+
+(defn ns-do-si-do  "Takes in a set of 16 tiles, and performs do-si-do on one north-south column."
+  [s colnum]
+  (rot-90 (ew-do-si-do (rot-90 s) colnum)))
+
+(defn rotate-board-clockwise [[c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12 c13 c14 c15 c16]]
+  [c13 c9 c5 c1
+	 c14 c10 c6 c2
+	 c15 c11 c7 c3
+	 c16 c12 c8 c4])
+
+(defn rotate-quad0-clockwise
+  "Rotate the tiles of the upper left quadrant clockwise."
+  [[c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12 c13 c14 c15 c16]]
+  [c5 c1 c3 c4
+	 c6 c2 c7 c8
+	 c9 c10 c11 c12
+	 c13 c14 c15 c16])
+
+(defn rotate-quad0-counterclockwise
+  "Rotate the tiles of the upper left quadrant counterclockwise."
+  [[c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12 c13 c14 c15 c16]]
+	[c2 c6 c3 c4
+	 c1 c5 c7 c8
+	 c9 c10 c11 c12
+	 c13 c14 c15 c16])
+
+(defn rotate-quad
+  "Rotate quadrant N of board according to QUADRANT-ROTATION-FUNCTION where quadrants are numbered
+  sequentially, clockwise from upper left."
+  [board n quadrant-rotation-function]
+
+	(let [rotated-rotated (quadrant-rotation-function
+	;; Rotate the whole board counterclockwise n times
+	                       (nth (iterate rotate-board-clockwise board) (mod (* n -1) 4)))]
+	;; Rotate the whole board back to its original position
+	  (nth (iterate rotate-board-clockwise rotated-rotated) n)))
+
+(defn corner-clockwise
+  ""
+  [s quad]
+  (rotate-quad s quad rotate-quad0-clockwise))
+
+(defn corner-counterclockwise
+  ""
+  [s quad]
+  (rotate-quad s quad rotate-quad0-counterclockwise))
+
+(defn define-target
+  "Input a cell number 0-15; return a map of the row, column, and quad."
+  [cell-num]
+   {:row (int (Math/floor (/ cell-num 4)))
+    :column (mod cell-num 4)
+    :quad (case cell-num
+            0 0   1 0   2 1   3 1
+            4 0   5 0   6 1   7 1
+            8 3   9 3   10 2  11 2
+            12 3  13 3  14 2     2)})
+
+(defn do-action
+  [s target action]
+  (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
+        target-arg (cond
+                     (some #(= action %) '(:row-east :row-west :ew-do-si-do :ew-reverse)) (:row target)
+                     (some #(= action %) '(:col-north :col-south :ns-do-si-do :ns-reverse)) (:column target)
+                     :else (:quad target))]
+    (function s target-arg)))
