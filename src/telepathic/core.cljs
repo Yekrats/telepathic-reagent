@@ -13,7 +13,8 @@
                      :board (sls)
                      :actions (initiate-actions)
                      :selected-action nil
-                     :action-confirmed nil}))
+                     :action-confirmed nil
+                     :current-player :color-player}))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -33,7 +34,8 @@
                                                       (when (:action-confirmed @app-state)
                                                         (let [card-index (+ (* row-index 4) col-index)]
                                                           (swap! app-state
-                                                                 #(assoc @app-state
+                                                                 #(assoc @app-state  ;; FIX - Move :selected-action to :actions :discards
+                                                                                     ;; FIX - Draw new action card from deck. New deck is "rest" of deck.
                                                                          :board (do-action (:board @app-state)
                                                                                            (define-target card-index)
                                                                                            (:selected-action @app-state))
@@ -59,7 +61,7 @@
   "Takes a player key, and renders either color or shape player's condition cards.
   Inputs either :color-player or :shape-player."
   [player]
-  (let [player-str (->> player name (take 5) (apply str))]
+  (let [player-str (->> player name (take 5) (apply str))] ; Take the string out of the key. (First 5 letters.)
     [:<>
      [:div {:class "condition-card"}
         [:img {:src (str "/images/" player-str "-win.png")
@@ -72,6 +74,11 @@
         [:img {:src (condition-asset (-> @app-state player :lose))
            :class "card-image condition-front"}]]]))
 
+(defn other-player
+  "Returns the other player who is not :current-player."
+  []
+  (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
+
 (defn render-game []
   [:<>
    [:div {:class "row"}
@@ -80,11 +87,13 @@
    (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
      [:div {:class "row"}
       [:button
-       {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true)))}
+       {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
+                                                            :current-player (other-player))))}
        "Confirm"]])
    [:div {:class "row"}
-    (render-player :color-player)
-    (render-player :shape-player)]])
+    (if (= (:current-player @app-state) :color-player)
+      (render-player :color-player)
+      (render-player :shape-player))]])
 
 (defn mount [el]
   (rdom/render [render-game] el))
