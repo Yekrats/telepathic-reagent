@@ -19,8 +19,34 @@
 (defn get-app-element []
   (gdom/getElement "app"))
 
+(defn deck-manipulations
+  ""
+  [row-index col-index]
+  (let [card-index (+ (* row-index 4) col-index)
+        selected :selected-action
+        available (-> @app-state :actions :available)
+        selected-index (.indexOf available selected) ; Check if key is in the available actions.
+        discard (-> @app-state :actions :discard) ; Discard deck.
+        top-card (-> @app-state :actions :deck first) ; Top card of draw deck.
+        rest-of-deck (-> @app-state :actions :deck rest vec)] ; Rest of the draw deck.
+    (swap! app-state
+           #(assoc @app-state
+                   :board (do-action (:board @app-state)
+                                     (define-target card-index)
+                                     (:selected-action @app-state))
+                   :selected-action nil
+                   :action-confirmed nil
+                   ;; :actions {
+                   ;;           :available ; First we remove the selected action at index.
+                   ;;                  (conj (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
+                   ;;                                      (subvec available (inc selected-index)))) ; Add to all cards one after index.
+                   ;;                          top-card) ; And add the top card of the deck to the available cards.
+                   ;;           :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
+                   ;;           :discard (conj discard selected)}
+                   )))) ; Adding the seleccted card to the end of the discard pile.
+
 (defn render-board
-  "Render the game board from app state."
+  "Render the game board (16 tiles) from app state."
   []
   [:table
    [:tbody
@@ -32,17 +58,10 @@
                                            :class   "card-image"
                                            :onClick (fn [_]
                                                       (when (:action-confirmed @app-state)
-                                                        (let [card-index (+ (* row-index 4) col-index)]
-                                                          (swap! app-state
-                                                                 #(assoc @app-state  ;; FIX - Move :selected-action to :actions :discards
-                                                                                     ;; FIX - Draw new action card from deck. New deck is "rest" of deck.
-                                                                         :board (do-action (:board @app-state)
-                                                                                           (define-target card-index)
-                                                                                           (:selected-action @app-state))
-                                                                         :selected-action nil
-                                                                         :action-confirmed nil)))))}]])
+                                                       (deck-manipulations row-index col-index)))}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
+
 
 (defn render-actions
   "Render the four current actions from state."
