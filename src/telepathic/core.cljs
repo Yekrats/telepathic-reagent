@@ -55,35 +55,22 @@
                              (= (:selected-action @app-state) %))
                         (-> @app-state :actions :available)))])
 
-(defn render-color-player
-  "Render the condition cards for the color player from state."
-  []
-  [:<>
-   [:div {:class "condition-card"}
-    [:img {:src "/images/color-win.png"
+(defn render-player
+  "Takes a player key, and renders either color or shape player's condition cards.
+  Inputs either :color-player or :shape-player."
+  [player]
+  (let [player-str (->> player name (take 5) (apply str))]
+    [:<>
+     [:div {:class "condition-card"}
+        [:img {:src (str "/images/" player-str "-win.png")
            :class "card-image condition-back"}]
-    [:img {:src (condition-asset (-> @app-state :color-player :win))
+        [:img {:src (condition-asset (-> @app-state player :win))
            :class "card-image condition-front"}]]
-   [:div {:class "condition-card"}
-    [:img {:src "/images/color-lose.png"
+     [:div {:class "condition-card"}
+        [:img {:src (str "/images/" player-str "-lose.png")
            :class "card-image condition-back"}]
-    [:img {:src (condition-asset (-> @app-state :color-player :lose))
-           :class "card-image condition-front"}]]])
-
-(defn render-shape-player
-  "Render the condition cards for the shape player from state."
-  []
-  [:<>
-   [:div {:class "condition-card"}
-    [:img {:src "/images/shape-win.png"
-           :class "card-image condition-back"}]
-    [:img {:src (condition-asset (-> @app-state :shape-player :win))
-           :class "card-image condition-front"}]]
-   [:div {:class "condition-card"}
-    [:img {:src "/images/shape-lose.png"
-           :class "card-image condition-back"}]
-    [:img {:src (condition-asset (-> @app-state :shape-player :lose))
-           :class "card-image condition-front"}]]])
+        [:img {:src (condition-asset (-> @app-state player :lose))
+           :class "card-image condition-front"}]]]))
 
 (defn render-game []
   [:<>
@@ -96,8 +83,8 @@
        {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true)))}
        "Confirm"]])
    [:div {:class "row"}
-    (render-color-player)
-    (render-shape-player)]])
+    (render-player :color-player)
+    (render-player :shape-player)]])
 
 (defn mount [el]
   (rdom/render [render-game] el))
