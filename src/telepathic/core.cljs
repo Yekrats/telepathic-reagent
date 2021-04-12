@@ -4,6 +4,7 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
+   [clojure.string :as str]
    [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action initiate-actions shapes sls tile-asset]]))
 
 ;; define your app data so that it doesn't get over-written on reload
@@ -20,7 +21,7 @@
   (gdom/getElement "app"))
 
 (defn deck-manipulations
-  ""
+  "Perform manipulations on the tile board and card deck based on player activities."
   [row-index col-index]
   (let [tile-index (+ (* row-index 4) col-index)
         selected (:selected-action @app-state)
@@ -39,8 +40,8 @@
                    :actions {
                              :available ; First we remove the selected action at index.
                                     (conj (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
-                                                        (subvec available (inc selected-index)))) ; Add to all cards one after index.
-                                            top-card) ; And add the top card of the deck to the available cards.
+                                                       (subvec available (inc selected-index)))) ; Add to all cards one after index.
+                                          top-card) ; And add the top card of the deck to the available cards.
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
                              :discard (conj discard selected) }   ; Adding the selected card to the end of the discard pile
                    ))))
@@ -76,30 +77,60 @@
                              (= (:selected-action @app-state) %))
                         (-> @app-state :actions :available)))])
 
+(defn player-str
+  "With no arguments, gives a text string of who the current player is.
+  With a key player argument, gives text string of that player.
+  Returns either 'color' or 'shape'."
+
+  ([]       (player-str (:current-player @app-state)))
+  ([player] (->> player name (take 5) (apply str))))
+
+(defn address-player
+  "Returns 'Shape player' or 'Color player' - used to address the current player."
+  []
+  (str (str/capitalize (player-str)) " player"))
+
 (defn render-player
   "Takes a player key, and renders either color or shape player's condition cards.
   Inputs either :color-player or :shape-player."
   [player]
-  (let [player-str (->> player name (take 5) (apply str))] ; Take the string out of the key. (First 5 letters.)
     [:<>
      [:div {:class "condition-card"}
-        [:img {:src (str "/images/" player-str "-win.png")
+        [:img {:src (str "/images/" (player-str player) "-win.png")
            :class "card-image condition-back"}]
         [:img {:src (condition-asset (-> @app-state player :win))
            :class "card-image condition-front"}]]
      [:div {:class "condition-card"}
-        [:img {:src (str "/images/" player-str "-lose.png")
+        [:img {:src (str "/images/" (player-str player) "-lose.png")
            :class "card-image condition-back"}]
         [:img {:src (condition-asset (-> @app-state player :lose))
-           :class "card-image condition-front"}]]]))
+           :class "card-image condition-front"}]]])
 
 (defn other-player
   "Returns the other player who is not :current-player."
   []
   (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
 
+(defn selected-not-confirmed?
+  "Returns true if the game state is a selected action, but the confirmed button has
+  not yet been pressed. False otherwise."
+  []
+   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
+
+(defn render-instructions
+  "Instructs the players what to do next."
+  []
+  (cond
+    (nil? (:selected-action @app-state))    (str (address-player) " - Select an action.")
+    (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action.")
+    (and (:selected-action @app-state) (:action-confirmed @app-state))
+                                            (str (address-player) " - Select where to apply the action.")))
+
 (defn render-game []
   [:<>
+   [:div {:class "instructions"}
+    (render-instructions)]
+
    [:div {:class "row"}
     (render-board)
     (render-actions)]
