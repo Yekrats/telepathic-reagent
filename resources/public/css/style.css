@@ -5,8 +5,11 @@
 	display: flex;
 	flex-direction: column;
 }
-.action-card { margin: 4px; }
-.selected-action-card { border: 2px solid red; }
+.action-card { margin: 4px; align-self: center; }
+.selected-action-card { border: 2px solid red; align-self: center; }
+
+.non-selected-action-card { opacity: 0.5; }
+
 .row {
 	display: flex;
 	flex-direction: row;

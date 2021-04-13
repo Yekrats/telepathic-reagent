@@ -46,6 +46,12 @@
                              :discard (conj discard selected) }   ; Adding the selected card to the end of the discard pile
                    ))))
 
+(defn selected-not-confirmed?
+  "Returns true if the game state is a selected action, but the confirmed button has
+  not yet been pressed. False otherwise."
+  []
+   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
+
 (defn render-board
   "Render the game board (16 tiles) from app state."
   []
@@ -67,15 +73,19 @@
 (defn render-actions
   "Render the four current actions from state."
   []
-  [:div {:id "action-cards" }
+  [:div {:id "action-cards"
+         :class (if (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)) "highlight" "no-highlight")}
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
-                         :class (str (when (= (:selected-action @app-state) action) "selected-action-card ") "card-image action-card")
+                         :class (str (cond
+                                       (= (:selected-action @app-state) action) "selected-action-card "
+                                       (some? (:selected-action @app-state)) "non-selected-action-card ")
+                                     "card-image action-card")
                          :key index
                          :onClick (fn [_] (swap! app-state #(assoc @app-state :selected-action action)))}])
-                (filter #(or (not (:action-confirmed @app-state))
-                             (= (:selected-action @app-state) %))
-                        (-> @app-state :actions :available)))])
+ ;;               (filter #(or (not (:action-confirmed @app-state))
+ ;;                            (= (:selected-action @app-state) %))
+                        (-> @app-state :actions :available))])
 
 (defn player-str
   "With no arguments, gives a text string of who the current player is.
@@ -111,11 +121,7 @@
   []
   (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
 
-(defn selected-not-confirmed?
-  "Returns true if the game state is a selected action, but the confirmed button has
-  not yet been pressed. False otherwise."
-  []
-   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
+
 
 (defn render-instructions
   "Instructs the players what to do next."
