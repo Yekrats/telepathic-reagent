@@ -4,7 +4,9 @@ Clojurescript implementation of Carl Klutzke's "Telepathic" https://www.thegamec
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+<img src="https://i.imgur.com/BuSHFpY.png" alt="Image of the board game 'Telepathic'" width="400"/>
+
+This is an attempt to develop the card game "Telepathic" in a ClojureScript environment. Though the game is still in development, there are pieces that are working.
 
 ## Development
 
