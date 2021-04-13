@@ -74,7 +74,7 @@
   "Render the four current actions from state."
   []
   [:div {:id "action-cards"
-         :class (if (select-action-phase?) "highlight" "no-highlight")}
+         :class (when (select-action-phase?) "highlight")}
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
                          :class (str (cond
