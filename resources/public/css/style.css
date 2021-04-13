@@ -5,7 +5,7 @@
 	display: flex;
 	flex-direction: column;
 }
-.action-card { margin: 4px; align-self: center; }
+.action-card { margin: 4px; margin-left: 15px; margin-right: 15px; align-self: center; }
 .selected-action-card { border: 2px solid red; align-self: center; }
 
 .non-selected-action-card { opacity: 0.5; }
@@ -25,3 +25,5 @@
 .condition-card:hover .condition-back {
 	display: none;
 }
+
+.highlight { background-color: lightyellow; }

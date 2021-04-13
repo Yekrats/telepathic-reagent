@@ -46,11 +46,11 @@
                              :discard (conj discard selected) }   ; Adding the selected card to the end of the discard pile
                    ))))
 
-(defn selected-not-confirmed?
-  "Returns true if the game state is a selected action, but the confirmed button has
-  not yet been pressed. False otherwise."
-  []
+(defn selected-not-confirmed? []
    (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
+
+(defn select-action-phase? []
+  (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)))
 
 (defn render-board
   "Render the game board (16 tiles) from app state."
@@ -74,7 +74,7 @@
   "Render the four current actions from state."
   []
   [:div {:id "action-cards"
-         :class (if (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)) "highlight" "no-highlight")}
+         :class (if (select-action-phase?) "highlight" "no-highlight")}
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
                          :class (str (cond
