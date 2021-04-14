@@ -243,41 +243,17 @@
             8 3   9 3   10 2  11 2
             12 3  13 3  14 2     2)})
 
+(defn targeter
+  "Show the target of a particular action.
+   Input an action key, and it will return, :row, :column, or :quad."
+  [action]
+  (cond
+    (some #(= action %) '(:row-east :row-west :ew-do-si-do :ew-reverse)) :row
+    (some #(= action %) '(:col-north :col-south :ns-do-si-do :ns-reverse)) :column
+    :else :quad))
+
 (defn do-action
   [s target action]
   (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
-        target-arg (cond
-                     (some #(= action %) '(:row-east :row-west :ew-do-si-do :ew-reverse)) (:row target)
-                     (some #(= action %) '(:col-north :col-south :ns-do-si-do :ns-reverse)) (:column target)
-                     :else (:quad target))]
+        target-arg ((targeter action) target)]
     (function s target-arg)))
-
-
-
-(defn remove-action
-  ""
-  []
-  (let [available (-> @app-state :actions :available)
-        index (.indexOf available key) ; Check if key is in the available actions.
-        discard (-> @app-state :actions :discard)]
-
-        (-> @app-state
-            ; Otherwise, remove the action card at the index.
-            (assoc-in [:actions :available] (vec (concat (subvec available 0 index)
-                                                         (subvec available (inc index)))))
-            ; Add the key to the end of the discard.
-            (assoc-in [:actions :discard] (conj discard key)))))
-
-(defn draw-action
-  "Take the top card from the action deck of the game state (state), and put it on the bottom
-  of the available pile.  Returns the new state."
-  [state]
-  (let [available (-> state :actions :available) ; Available action cards.
-        top-card (-> state :actions :deck first) ; Top card of draw deck.
-        rest-of-deck (-> state :actions :deck rest vec)] ; Rest of the draw deck.
-
-    (-> state
-        ; The new deck is all but the top card. I.e. the rest of the deck.
-        (assoc-in [:actions :deck] rest-of-deck)
-        ; The new available pile adds the top card to the available cards.
-        (assoc-in [:actions :available] (conj available top-card)))))
