@@ -223,12 +223,14 @@
 	  (nth (iterate rotate-board-clockwise rotated-rotated) n)))
 
 (defn corner-clockwise
-  ""
+  "Rotates the quadrant number 'quad' clockwise on a set of tiles 's'.
+  Returns a new set of tiles."
   [s quad]
   (rotate-quad s quad rotate-quad0-clockwise))
 
 (defn corner-counterclockwise
-  ""
+  "Rotates the quadrant number 'quad' counterclockwise on a set of tiles 's'.
+  Returns a new set of tiles."
   [s quad]
   (rotate-quad s quad rotate-quad0-counterclockwise))
 
@@ -253,6 +255,8 @@
     :else :quad))
 
 (defn do-action
+  "Performs an action on a set of tiles (s) starting from a particular starting target (target).
+  Returns a new set of tiles."
   [s target action]
   (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
         target-arg ((targeter action) target)]
