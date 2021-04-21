@@ -39,16 +39,16 @@
                                      (:selected-action @app-state))
                    :selected-action nil
                    :action-confirmed nil
-                   :lost-game (play-state-losing? (:board @app-state))
                    :actions {
                              :available ; First we remove the selected action at index.
                                     (conj (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
                                                        (subvec available (inc selected-index)))) ; Add to all cards one after index.
                                           top-card) ; And add the top card of the deck to the available cards.
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
-                             :discard (conj discard selected)
-}   ; Adding the selected card to the end of the discard pile
-                   ))))
+                             :discard (conj discard selected)}   ; Adding the selected card to the end of the discard pile
+                   ))
+    (swap! app-state
+           #(assoc @app-state :lost-game (play-state-losing? @app-state)))))
 
 (defn selected-not-confirmed? []
    (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))

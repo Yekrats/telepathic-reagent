@@ -1,6 +1,7 @@
 (ns telepathic.logic
   (:require            [clojure.string :as str]
                        [cljs.pprint :refer [pprint]]
+                       [clojure.set :as s]
 ))
 
 (def testdata
@@ -261,6 +262,18 @@
   (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
         target-arg ((targeter action) target)]
     (function s target-arg)))
+
+(defn test-each-row
+  "Returns sequence of matched 3s in the 4 rows"
+  [s] (flatten (when (seq s)
+                 (conj [] (check4 (take 4 s)) (test-each-row (drop 4 s))))))
+
+(defn test-each-column   "Returns sequence of matched 3s in the 4 columns" [s]
+  (test-each-row (rot-90 s)))
+
+(defn test-rc "Tests each row and column. Returns a list of matched keys."
+  [s]
+  (remove #(nil? %) (concat (test-each-row s) (test-each-column s))))
 
 (defn play-state-losing?
   "Evaluates a play state, to see if either players' lose condition is present.
