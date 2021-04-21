@@ -261,3 +261,11 @@
   (let [function ((ns-publics 'telepathic.logic) (-> action name symbol))
         target-arg ((targeter action) target)]
     (function s target-arg)))
+
+(defn play-state-losing?
+  "Evaluates a play state, to see if either players' lose condition is present.
+  Returns true/false."
+  [state]
+  (not-empty (s/intersection
+              #{(:lose (:color-player state)) (:lose (:shape-player state))}
+              (set (test-rc (:board state))))))

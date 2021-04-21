@@ -5,7 +5,8 @@
    [reagent.dom :as rdom]
    [cljs.pprint :refer [pprint]]
    [clojure.string :as str]
-   [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action initiate-actions shapes sls tile-asset]]))
+   [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action
+                             initiate-actions shapes sls tile-asset play-state-losing?]]))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce app-state (atom
@@ -15,7 +16,8 @@
                      :actions (initiate-actions)
                      :selected-action nil
                      :action-confirmed nil
-                     :current-player :color-player}))
+                     :current-player :color-player
+                     :lost-game nil}))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -37,13 +39,15 @@
                                      (:selected-action @app-state))
                    :selected-action nil
                    :action-confirmed nil
+                   :lost-game (play-state-losing? (:board @app-state))
                    :actions {
                              :available ; First we remove the selected action at index.
                                     (conj (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
                                                        (subvec available (inc selected-index)))) ; Add to all cards one after index.
                                           top-card) ; And add the top card of the deck to the available cards.
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
-                             :discard (conj discard selected) }   ; Adding the selected card to the end of the discard pile
+                             :discard (conj discard selected)
+}   ; Adding the selected card to the end of the discard pile
                    ))))
 
 (defn selected-not-confirmed? []
@@ -127,6 +131,7 @@
   "Instructs the players what to do next."
   []
   (cond
+    (:lost-game @app-state)                 "The game is lost."
     (nil? (:selected-action @app-state))    (str (address-player) " - Select an action.")
     (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action.")
     (and (:selected-action @app-state) (:action-confirmed @app-state))
