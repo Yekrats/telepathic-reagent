@@ -279,6 +279,8 @@
   "Evaluates a play state, to see if either players' lose condition is present.
   Returns true/false."
   [state]
-  (not-empty (s/intersection
-              #{(:lose (:color-player state)) (:lose (:shape-player state))}
-              (set (test-rc (:board state))))))
+  (or
+   (not-empty (s/intersection
+               #{(:lose (:color-player state)) (:lose (:shape-player state))}
+               (set (test-rc (:board state)))))
+   (empty? (-> :actions :available state))))

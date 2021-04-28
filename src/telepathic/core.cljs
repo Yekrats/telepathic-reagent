@@ -8,16 +8,17 @@
    [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action
                              initiate-actions shapes sls tile-asset play-state-losing?]]))
 
-;; define your app data so that it doesn't get over-written on reload
-(defonce app-state (atom
-                    {:color-player (condition-cards colors)
-                     :shape-player (condition-cards shapes)
-                     :board (sls)
-                     :actions (initiate-actions)
-                     :selected-action nil
-                     :action-confirmed nil
-                     :current-player :color-player
-                     :lost-game nil}))
+(defn new-game []
+   {:color-player (condition-cards colors)
+    :shape-player (condition-cards shapes)
+    :board (sls)
+    :actions (initiate-actions)
+    :selected-action nil
+    :action-confirmed nil
+    :current-player :color-player
+    :lost-game nil})
+
+(defonce app-state (atom (new-game)))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -32,6 +33,9 @@
         discard (-> @app-state :actions :discard) ; Discard deck.
         top-card (-> @app-state :actions :deck first) ; Top card of draw deck.
         rest-of-deck (-> @app-state :actions :deck rest vec)] ; Rest of the draw deck.
+    rest-of-available ; First we remove the selected action at index.
+                      (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
+                                   (subvec available (inc selected-index))))
     (swap! app-state
            #(assoc @app-state
                    :board (do-action (:board @app-state)
@@ -40,10 +44,8 @@
                    :selected-action nil
                    :action-confirmed nil
                    :actions {
-                             :available ; First we remove the selected action at index.
-                                    (conj (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
-                                                       (subvec available (inc selected-index)))) ; Add to all cards one after index.
-                                          top-card) ; And add the top card of the deck to the available cards.
+                             :available
+                               (when top-card (conj rest-of-available top-card)) ; Add the top card of the avail to the available cards. 
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
                              :discard (conj discard selected)}   ; Adding the selected card to the end of the discard pile
                    ))
@@ -68,7 +70,7 @@
                                     [:img {:src     (tile-asset card)
                                            :class   "card-image"
                                            :onClick (fn [_]
-                                                      (when (:action-confirmed @app-state)
+                                                      (when (and (:action-confirmed @app-state) (not (:lost-game @app-state)))
                                                        (deck-manipulations row-index col-index)))}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
@@ -86,9 +88,8 @@
                                        (some? (:selected-action @app-state)) "non-selected-action-card ")
                                      "card-image action-card")
                          :key index
-                         :onClick (fn [_] (swap! app-state #(assoc @app-state :selected-action action)))}])
- ;;               (filter #(or (not (:action-confirmed @app-state))
- ;;                            (= (:selected-action @app-state) %))
+                         :onClick (fn [_] (when (not (:lost-game @app-state))
+                                            (swap! app-state #(assoc @app-state :selected-action action))))}])
                         (-> @app-state :actions :available))])
 
 (defn player-str
@@ -131,11 +132,15 @@
   "Instructs the players what to do next."
   []
   (cond
-    (:lost-game @app-state)                 "The game is lost."
-    (nil? (:selected-action @app-state))    (str (address-player) " - Select an action.")
-    (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action.")
+    (:lost-game @app-state)                 [:div
+                                             [:div "The game is lost"]
+                                             [:button
+                                              {:onClick (fn [_] (reset! app-state (new-game)))}
+                                              "New Game"]]
+    (nil? (:selected-action @app-state))    (str (address-player) " - Select an action")
+    (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action")
     (and (:selected-action @app-state) (:action-confirmed @app-state))
-                                            (str (address-player) " - Select where to apply the action.")))
+                                            (str (address-player) " - Select where to apply the action")))
 
 (defn render-game []
   [:<>
