@@ -6,7 +6,7 @@
    [cljs.pprint :refer [pprint]]
    [clojure.string :as str]
    [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action
-                             initiate-actions shapes sls tile-asset play-state-losing?]]))
+                             initiate-actions shapes sls tile-asset play-state-losing? test-rc]]))
 
 (defn new-game []
    {:color-player (condition-cards colors)
@@ -45,7 +45,9 @@
                    :action-confirmed nil
                    :actions {
                              :available
-                               (when top-card (conj rest-of-available top-card)) ; Add the top card of the avail to the available cards. 
+                             (if top-card
+                               (conj rest-of-available top-card) ; Add the top card of the avail to the available cards.
+                               rest-of-available) ; Or, if no top card, just use what's available.
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
                              :discard (conj discard selected)}   ; Adding the selected card to the end of the discard pile
                    ))
