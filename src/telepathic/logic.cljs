@@ -279,8 +279,11 @@
   "Evaluates a play state, to see if either players' lose condition is present.
   Returns true/false."
   [state]
-  (or
    (not-empty (s/intersection
                #{(:lose (:color-player state)) (:lose (:shape-player state))}
-               (set (test-rc (:board state)))))
-   (empty? (-> state :actions :available))))
+               (set (test-rc (:board state))))))
+
+(defn must-make-announcment?
+  "Returns true if there are no available actions and the players must make an announcement."
+  [state]
+  (-> state :actions :available empty?))

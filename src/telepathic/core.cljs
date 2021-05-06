@@ -32,10 +32,10 @@
         selected-index (.indexOf available selected) ; Check if key is in the available actions.
         discard (-> @app-state :actions :discard) ; Discard deck.
         top-card (-> @app-state :actions :deck first) ; Top card of draw deck.
-        rest-of-deck (-> @app-state :actions :deck rest vec)] ; Rest of the draw deck.
-    rest-of-available ; First we remove the selected action at index.
+        rest-of-deck (-> @app-state :actions :deck rest vec) ; Rest of the draw deck.
+        rest-of-available ; First we remove the selected action at index.
                       (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
-                                   (subvec available (inc selected-index))))
+                                   (subvec available (inc selected-index))))]
     (swap! app-state
            #(assoc @app-state
                    :board (do-action (:board @app-state)
@@ -145,19 +145,28 @@
                                             (str (address-player) " - Select where to apply the action")))
 
 (defn render-game []
+  "Basic rendering of the game screen:
+    1. Instructional area
+    2. Command buttons.
+    3. A section for the board with actions on the right.
+    4. A section for the players' goal cards."
   [:<>
    [:div {:class "instructions"}
     (render-instructions)]
 
-   [:div {:class "row"}
-    (render-board)
-    (render-actions)]
+   [:div {:class "button-area"}
    (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
      [:div {:class "row"}
       [:button
        {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
                                                             :current-player (other-player))))}
        "Confirm"]])
+
+    ]
+
+   [:div {:class "row"}
+    (render-board)
+    (render-actions)]
    [:div {:class "row"}
     (if (= (:current-player @app-state) :color-player)
       (render-player :color-player)
