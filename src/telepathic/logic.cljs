@@ -283,4 +283,4 @@
    (not-empty (s/intersection
                #{(:lose (:color-player state)) (:lose (:shape-player state))}
                (set (test-rc (:board state)))))
-   (empty? (-> :actions :available state))))
+   (empty? (-> state :actions :available))))
