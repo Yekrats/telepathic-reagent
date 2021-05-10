@@ -59,6 +59,9 @@
 (defn select-action-phase? []
   (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)))
 
+(defn start-of-turn? []
+  (and (not (play-state-losing? @app-state)) (nil? (:selected-action @app-state))))
+
 (defn render-board
   "Render the game board (16 tiles) from app state."
   []
@@ -80,7 +83,7 @@
   "Render the four current actions from state."
   []
   [:div {:id "action-cards"
-         :class (when select-action-phase? "highlight")}
+         :class (when (select-action-phase?) "highlight")}
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
                          :class (str (cond
@@ -150,13 +153,16 @@
    [:div {:class "instructions"}
     (render-instructions)]
 
-   [:div {:class "button-area"}
-    (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
-      [:div {:class "row"}
+   [:div {:id "button-area"}
+    [:div {:class "row"}
+     (cond
+       (selected-not-confirmed?)
        [:button
         {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
                                                    :current-player (other-player))))}
-        "Confirm"]])]
+        "Confirm"]
+       (start-of-turn?) [:button "Declare"]
+       :else [:div])]]
 
    [:div {:class "row"}
     (render-board)

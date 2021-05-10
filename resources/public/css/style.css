@@ -44,3 +44,5 @@ button { font-size: 200%; }
 .highlight { background-color: lightyellow; }
 
 td:hover { background-color: lightgreen; }
+
+#button-area > div { min-height: 45px; }
