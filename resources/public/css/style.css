@@ -1,4 +1,17 @@
 /* some style */
+
+body, input, button, select, option, textarea {
+    font-family: Helvetica, Arial, sans-serif;
+}
+body {
+    font-size: 15px;
+}
+input, select, option, textarea {
+    font-size: 100%;
+}
+
+button { font-size: 200%; }
+
 .card-image { width: 150px; height: 150px; }
 #action-cards {
 	margin-left: 50px;

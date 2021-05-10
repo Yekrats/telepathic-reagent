@@ -9,14 +9,14 @@
                              initiate-actions shapes sls tile-asset play-state-losing? test-rc]]))
 
 (defn new-game []
-   {:color-player (condition-cards colors)
-    :shape-player (condition-cards shapes)
-    :board (sls)
-    :actions (initiate-actions)
-    :selected-action nil
-    :action-confirmed nil
-    :current-player :color-player
-    :lost-game nil})
+  {:color-player (condition-cards colors)
+   :shape-player (condition-cards shapes)
+   :board (sls)
+   :actions (initiate-actions)
+   :selected-action nil
+   :action-confirmed nil
+   :current-player :color-player
+   :lost-game nil})
 
 (defonce app-state (atom (new-game)))
 
@@ -34,8 +34,8 @@
         top-card (-> @app-state :actions :deck first) ; Top card of draw deck.
         rest-of-deck (-> @app-state :actions :deck rest vec) ; Rest of the draw deck.
         rest-of-available ; First we remove the selected action at index.
-                      (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
-                                   (subvec available (inc selected-index))))]
+        (vec (concat (subvec available 0 selected-index) ; Take all available cards 0 to index.
+                     (subvec available (inc selected-index))))]
     (swap! app-state
            #(assoc @app-state
                    :board (do-action (:board @app-state)
@@ -43,8 +43,7 @@
                                      (:selected-action @app-state))
                    :selected-action nil
                    :action-confirmed nil
-                   :actions {
-                             :available
+                   :actions {:available
                              (if top-card
                                (conj rest-of-available top-card) ; Add the top card of the avail to the available cards.
                                rest-of-available) ; Or, if no top card, just use what's available.
@@ -55,7 +54,7 @@
            #(assoc @app-state :lost-game (play-state-losing? @app-state)))))
 
 (defn selected-not-confirmed? []
-   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
+  (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
 
 (defn select-action-phase? []
   (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)))
@@ -73,16 +72,15 @@
                                            :class   "card-image"
                                            :onClick (fn [_]
                                                       (when (and (:action-confirmed @app-state) (not (:lost-game @app-state)))
-                                                       (deck-manipulations row-index col-index)))}]])
+                                                        (deck-manipulations row-index col-index)))}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
-
 
 (defn render-actions
   "Render the four current actions from state."
   []
   [:div {:id "action-cards"
-         :class (when (select-action-phase?) "highlight")}
+         :class (when select-action-phase? "highlight")}
    (map-indexed (fn [index action]
                   [:img {:src (str "/images/" (name action) ".png")
                          :class (str (cond
@@ -92,7 +90,7 @@
                          :key index
                          :onClick (fn [_] (when (not (:lost-game @app-state))
                                             (swap! app-state #(assoc @app-state :selected-action action))))}])
-                        (-> @app-state :actions :available))])
+                (-> @app-state :actions :available))])
 
 (defn player-str
   "With no arguments, gives a text string of who the current player is.
@@ -111,24 +109,22 @@
   "Takes a player key, and renders either color or shape player's condition cards.
   Inputs either :color-player or :shape-player."
   [player]
-    [:<>
-     [:div {:class "condition-card"}
-        [:img {:src (str "/images/" (player-str player) "-win.png")
+  [:<>
+   [:div {:class "condition-card"}
+    [:img {:src (str "/images/" (player-str player) "-win.png")
            :class "card-image condition-back"}]
-        [:img {:src (condition-asset (-> @app-state player :win))
+    [:img {:src (condition-asset (-> @app-state player :win))
            :class "card-image condition-front"}]]
-     [:div {:class "condition-card"}
-        [:img {:src (str "/images/" (player-str player) "-lose.png")
+   [:div {:class "condition-card"}
+    [:img {:src (str "/images/" (player-str player) "-lose.png")
            :class "card-image condition-back"}]
-        [:img {:src (condition-asset (-> @app-state player :lose))
+    [:img {:src (condition-asset (-> @app-state player :lose))
            :class "card-image condition-front"}]]])
 
 (defn other-player
   "Returns the other player who is not :current-player."
   []
   (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
-
-
 
 (defn render-instructions
   "Instructs the players what to do next."
@@ -142,7 +138,7 @@
     (nil? (:selected-action @app-state))    (str (address-player) " - Select an action")
     (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action")
     (and (:selected-action @app-state) (:action-confirmed @app-state))
-                                            (str (address-player) " - Select where to apply the action")))
+    (str (address-player) " - Select where to apply the action")))
 
 (defn render-game []
   "Basic rendering of the game screen:
@@ -155,14 +151,12 @@
     (render-instructions)]
 
    [:div {:class "button-area"}
-   (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
-     [:div {:class "row"}
-      [:button
-       {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
-                                                            :current-player (other-player))))}
-       "Confirm"]])
-
-    ]
+    (when (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state)))
+      [:div {:class "row"}
+       [:button
+        {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
+                                                   :current-player (other-player))))}
+        "Confirm"]])]
 
    [:div {:class "row"}
     (render-board)
