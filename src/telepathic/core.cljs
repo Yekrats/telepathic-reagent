@@ -16,7 +16,8 @@
    :selected-action nil
    :action-confirmed nil
    :current-player :color-player
-   :lost-game nil})
+   :lost-game nil
+   :declarations nil})
 
 (defonce app-state (atom (new-game)))
 
@@ -60,7 +61,9 @@
   (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)))
 
 (defn start-of-turn? []
-  (and (not (play-state-losing? @app-state)) (nil? (:selected-action @app-state))))
+  (and (not (play-state-losing? @app-state))
+       (nil? (:selected-action @app-state))
+       (not (:declarations @app-state))))
 
 (defn render-board
   "Render the game board (16 tiles) from app state."
@@ -91,7 +94,8 @@
                                        (some? (:selected-action @app-state)) "non-selected-action-card ")
                                      "card-image action-card")
                          :key index
-                         :onClick (fn [_] (when (not (:lost-game @app-state))
+                         :onClick (fn [_] (when (not (or (:declarations @app-state)
+                                                        (:lost-game @app-state)))
                                             (swap! app-state #(assoc @app-state :selected-action action))))}])
                 (-> @app-state :actions :available))])
 
@@ -133,15 +137,21 @@
   "Instructs the players what to do next."
   []
   (cond
-    (:lost-game @app-state)                 [:div
-                                             [:div "The game is lost"]
-                                             [:button
-                                              {:onClick (fn [_] (reset! app-state (new-game)))}
-                                              "New Game"]]
+    (:lost-game @app-state) [:div
+                              [:div "The game is lost"]
+                                [:button {:onClick (fn [_] (reset! app-state (new-game)))}
+                                         "New Game"]]
+    (:declarations @app-state) (str (address-player) " - Make a declaration")
     (nil? (:selected-action @app-state))    (str (address-player) " - Select an action")
     (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action")
     (and (:selected-action @app-state) (:action-confirmed @app-state))
     (str (address-player) " - Select where to apply the action")))
+
+(defn render-conditions
+  ""
+  []
+
+  )
 
 (defn render-game []
   "Basic rendering of the game screen:
@@ -161,8 +171,11 @@
         {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
                                                    :current-player (other-player))))}
         "Confirm"]
-       (start-of-turn?) [:button "Declare"]
-       :else [:div])]]
+       (start-of-turn?) [:button
+                         {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations {})))}
+                         "Declare"]
+       :else [:div])]
+    ]
 
    [:div {:class "row"}
     (render-board)

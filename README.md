@@ -1,6 +1,6 @@
 # telepathic-reagent
 
-Clojurescript implementation of Carl Klutzke's "Telepathic" https://www.thegamecrafter.com/games/telepathic
+Clojurescript implementation of Carl Klutzke's "Telepathic" https://AreYouTelepathic.com
 
 ## Overview
 
