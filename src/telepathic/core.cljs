@@ -65,6 +65,24 @@
        (nil? (:selected-action @app-state))
        (not (:declarations @app-state))))
 
+(defn player-str
+  "With no arguments, gives a text string of who the current player is.
+  With a key player argument, gives text string of that player.
+  Returns either 'color' or 'shape'."
+
+  ([]       (player-str (:current-player @app-state)))
+  ([player] (->> player name (take 5) (apply str))))
+
+(defn address-player
+  "Returns 'Shape player' or 'Color player' - used to address the current player."
+  []
+  (str (str/capitalize (player-str)) " player"))
+
+(defn other-player
+  "Returns the other player who is not :current-player."
+  []
+  (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
+
 (defn render-board
   "Render the game board (16 tiles) from app state."
   []
@@ -99,19 +117,6 @@
                                             (swap! app-state #(assoc @app-state :selected-action action))))}])
                 (-> @app-state :actions :available))])
 
-(defn player-str
-  "With no arguments, gives a text string of who the current player is.
-  With a key player argument, gives text string of that player.
-  Returns either 'color' or 'shape'."
-
-  ([]       (player-str (:current-player @app-state)))
-  ([player] (->> player name (take 5) (apply str))))
-
-(defn address-player
-  "Returns 'Shape player' or 'Color player' - used to address the current player."
-  []
-  (str (str/capitalize (player-str)) " player"))
-
 (defn render-player
   "Takes a player key, and renders either color or shape player's condition cards.
   Inputs either :color-player or :shape-player."
@@ -127,11 +132,6 @@
            :class "card-image condition-back"}]
     [:img {:src (condition-asset (-> @app-state player :lose))
            :class "card-image condition-front"}]]])
-
-(defn other-player
-  "Returns the other player who is not :current-player."
-  []
-  (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
 
 (defn render-instructions
   "Instructs the players what to do next."
@@ -150,47 +150,45 @@
 (defn render-conditions
   "Render the condition images for the current player"
   []
-[:div {:id "condition-cards"
-         }
+  [:div {:id "condition-cards" }
    (map-indexed (fn [index condition]
                   [:img {:src (condition-asset condition)
                          :key index
                          :onClick (fn [_] )}])
+                (if (= :color-player (:current-player @app-state))
+                  shapes
+                  colors))])
 
-
-  (if (= :color-player (:current-player @app-state))
-    shapes
-    colors
-    )
-  )])
-
-
-
-(defn render-game []
-  "Basic rendering of the game screen:
-    1. Instructional area
-    2. Command buttons.
-    3. A section for the board with actions on the right.
-    4. A section for the players' goal cards."
-  [:<>
-   [:div {:class "instructions"}
-    (render-instructions)]
-
-   [:div {:id "button-area"}
-    [:div {:class "row"}
+(defn render-upper-area
+  "Render the upper area containing buttons and declarations"
+  []
+  [:div {:class "row"}
      (cond
        (selected-not-confirmed?)
        [:button
         {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
                                                    :current-player (other-player))))}
         "Confirm"]
-       (start-of-turn?) [:button
-                         {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations {})))}
-                         "Declare"]
-       (:declarations @app-state) (render-conditions)
-       :else [:div])]
-    ]
+       (start-of-turn?)
+       [:button
+        {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations {})))}
+        "Declare"]
+       (:declarations @app-state)
+       (render-conditions)
+       :else [:div])])
 
+(defn render-game
+  "Basic rendering of the game screen:
+    1. Instructional area
+    2. Upper area with action buttons and declaration cards
+    3. A section for the board on the left with actions on the right
+    4. A lower section for the players' goal cards"
+  []
+  [:<>
+   [:div {:id "instructions"}
+    (render-instructions)]
+   [:div {:id "upper-area"}
+    (render-upper-area)]
    [:div {:class "row"}
     (render-board)
     (render-actions)]

@@ -1,5 +1,3 @@
-/* some style */
-
 body, input, button, select, option, textarea {
     font-family: Helvetica, Arial, sans-serif;
 }
@@ -12,18 +10,25 @@ input, select, option, textarea {
 
 button { font-size: 200%; }
 
+#instructions  { font-size: 30px; text-align: center; margin-top: 20px; }
+
+#upper-area > div { min-height: 45px; }
+
+#condition-cards img { width: 150px; margin-right: 5px; margin-left: 5px; }
+
 .card-image { width: 150px; height: 150px; }
+
 #action-cards {
 	margin-left: 50px;
 	display: flex;
 	flex-direction: column;
 }
+
 .action-card { margin: 4px; margin-left: 25px; margin-right: 25px; align-self: center; }
+
 .selected-action-card { border: 2px solid red; align-self: center; }
 
 .non-selected-action-card { opacity: 0.5; }
-
-#condition-cards img { width: 150px; margin-right: 5px; margin-left: 5px; }
 
 .row {
 	display: flex;
@@ -31,20 +36,19 @@ button { font-size: 200%; }
 	justify-content: center;
 	margin-top: 50px;
 }
+
 .condition-front {
 	display: none;
 }
+
 .condition-card:hover .condition-front {
 	display: block;
 }
+
 .condition-card:hover .condition-back {
 	display: none;
 }
 
-.instructions  { font-size: 30px; text-align: center; margin-top: 20px; }
-
 .highlight { background-color: lightyellow; }
 
 td:hover { background-color: lightgreen; }
-
-#button-area > div { min-height: 45px; }
