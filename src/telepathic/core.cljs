@@ -148,10 +148,23 @@
     (str (address-player) " - Select where to apply the action")))
 
 (defn render-conditions
-  ""
+  "Render the condition images for the current player"
   []
+[:div {:id "condition-cards"
+         }
+   (map-indexed (fn [index condition]
+                  [:img {:src (condition-asset condition)
+                         :key index
+                         :onClick (fn [_] )}])
 
-  )
+
+  (if (= :color-player (:current-player @app-state))
+    shapes
+    colors
+    )
+  )])
+
+
 
 (defn render-game []
   "Basic rendering of the game screen:
@@ -174,6 +187,7 @@
        (start-of-turn?) [:button
                          {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations {})))}
                          "Declare"]
+       (:declarations @app-state) (render-conditions)
        :else [:div])]
     ]
 
