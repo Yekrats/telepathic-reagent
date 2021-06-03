@@ -16,7 +16,6 @@
    :selected-action nil
    :action-confirmed nil
    :current-player :color-player
-   :lost-game nil
    :declarations nil})
 
 (defonce app-state (atom (new-game)))
@@ -50,9 +49,7 @@
                                rest-of-available) ; Or, if no top card, just use what's available.
                              :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
                              :discard (conj discard selected)}   ; Adding the selected card to the end of the discard pile
-                   ))
-    (swap! app-state
-           #(assoc @app-state :lost-game (play-state-losing? @app-state)))))
+                   ))))
 
 (defn selected-not-confirmed? []
   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
@@ -83,6 +80,13 @@
   []
   (if (= (:current-player @app-state) :color-player) :shape-player :color-player))
 
+(defn add-declaration
+  "Add color or shape declaration to app state"
+  [condition]
+  (swap! app-state #(assoc @app-state
+                           :declarations (conj (:declarations @app-state) condition)
+                           :current-player (other-player))))
+
 (defn render-board
   "Render the game board (16 tiles) from app state."
   []
@@ -95,7 +99,7 @@
                                     [:img {:src     (tile-asset card)
                                            :class   "card-image"
                                            :onClick (fn [_]
-                                                      (when (and (:action-confirmed @app-state) (not (:lost-game @app-state)))
+                                                      (when (and (:action-confirmed @app-state) (not (play-state-losing? @app-state)))
                                                         (deck-manipulations row-index col-index)))}]])
                                  row)])
                  (partition 4 (:board @app-state)))]])
@@ -113,7 +117,7 @@
                                      "card-image action-card")
                          :key index
                          :onClick (fn [_] (when (not (or (:declarations @app-state)
-                                                        (:lost-game @app-state)))
+                                                         (play-state-losing? @app-state)))
                                             (swap! app-state #(assoc @app-state :selected-action action))))}])
                 (-> @app-state :actions :available))])
 
@@ -137,10 +141,11 @@
   "Instructs the players what to do next."
   []
   (cond
-    (:lost-game @app-state) [:div
-                              [:div "The game is lost"]
-                                [:button {:onClick (fn [_] (reset! app-state (new-game)))}
-                                         "New Game"]]
+    (play-state-losing? @app-state)
+    [:div
+     [:div "The game is lost"]
+     [:button {:onClick (fn [_] (reset! app-state (new-game)))}
+      "New Game"]]
     (:declarations @app-state) (str (address-player) " - Make a declaration")
     (nil? (:selected-action @app-state))    (str (address-player) " - Select an action")
     (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action")
@@ -150,11 +155,11 @@
 (defn render-conditions
   "Render the condition images for the current player"
   []
-  [:div {:id "condition-cards" }
+  [:div {:id "condition-cards"}
    (map-indexed (fn [index condition]
                   [:img {:src (condition-asset condition)
                          :key index
-                         :onClick (fn [_] )}])
+                         :onClick (fn [_] (add-declaration condition))}])
                 (if (= :color-player (:current-player @app-state))
                   shapes
                   colors))])
@@ -163,19 +168,19 @@
   "Render the upper area containing buttons and declarations"
   []
   [:div {:class "row"}
-     (cond
-       (selected-not-confirmed?)
-       [:button
-        {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
-                                                   :current-player (other-player))))}
-        "Confirm"]
-       (start-of-turn?)
-       [:button
-        {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations {})))}
-        "Declare"]
-       (:declarations @app-state)
-       (render-conditions)
-       :else [:div])])
+   (cond
+     (selected-not-confirmed?)
+     [:button
+      {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
+                                                 :current-player (other-player))))}
+      "Confirm"]
+     (start-of-turn?)
+     [:button
+      {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations [])))}
+      "Declare"]
+     (and (:declarations @app-state) (not (play-state-losing? @app-state)))
+     (render-conditions)
+     :else [:div])])
 
 (defn render-game
   "Basic rendering of the game screen:

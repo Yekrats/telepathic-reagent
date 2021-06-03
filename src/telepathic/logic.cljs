@@ -279,6 +279,14 @@
   "Evaluates a play state, to see if either players' lose condition is present.
   Returns true/false."
   [state]
+  (or
    (not-empty (s/intersection
                #{(:lose (:color-player state)) (:lose (:shape-player state))}
-               (set (test-rc (:board state))))))
+               (set (test-rc (:board state)))))
+   (and
+    (= 2 (count (:declarations state)))
+    (< (count
+        (clojure.set/intersection
+         #{(:win (:color-player state)) (:win (:shape-player state))}
+         (set (:declarations state))))
+       2))))
