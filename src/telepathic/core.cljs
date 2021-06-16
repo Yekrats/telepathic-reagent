@@ -6,7 +6,7 @@
    [cljs.pprint :refer [pprint]]
    [clojure.string :as str]
    [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action
-                             initiate-actions shapes sls tile-asset play-state-losing? test-rc]]))
+                             initiate-actions shapes sls tile-asset play-state-losing?]]))
 
 (defn new-game []
   {:color-player (condition-cards colors)

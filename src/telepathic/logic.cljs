@@ -7,9 +7,9 @@
 (def testdata
   { :color-player {:win :purple, :lose :green},
     :shape-player {:win :bacon, :lose :star},
-    :board [[:blue :circle]  [:green :bacon]  [:purple :circle] [:blue :cross]
-            [:orange :cross] [:blue :star]    [:orange :circle] [:purple :star]
-            [:green :star]   [:orange :star]  [:blue :bacon]    [:purple :cross]
+    :board [[:blue :circle]  [:green :bacon]  [:purple :circle] [:purple :bacon]
+            [:orange :cross] [:blue :star]    [:orange :circle] [:purple :bacon]
+            [:green :star]   [:orange :bacon]  [:blue :bacon]    [:purple :bacon]
             [:purple :bacon] [:green :circle] [:green :cross]   [:orange :bacon]],
     :actions {:available [:col-north :ew-reverse :corner-counterclockwise :row-east],
               :deck      [:row-west :col-south :ns-do-si-do :ns-reverse :ew-do-si-do
@@ -271,7 +271,7 @@
 (defn test-each-column   "Returns sequence of matched 3s in the 4 columns" [s]
   (test-each-row (rot-90 s)))
 
-(defn test-rc "Tests each row and column. Returns a list of matched keys."
+(defn matching-sets "Tests each row and column. Returns a list of matched keys."
   [s]
   (remove #(nil? %) (concat (test-each-row s) (test-each-column s))))
 
@@ -282,7 +282,7 @@
   (or
    (not-empty (s/intersection
                #{(:lose (:color-player state)) (:lose (:shape-player state))}
-               (set (test-rc (:board state)))))
+               (set (matching-sets (:board state)))))
    (and
     (= 2 (count (:declarations state)))
     (< (count
@@ -290,3 +290,13 @@
          #{(:win (:color-player state)) (:win (:shape-player state))}
          (set (:declarations state))))
        2))))
+
+(defn play-state-winning?
+  ""
+  [state]
+
+  (= 2 (count  (s/intersection
+                #{(:win (:color-player state)) (:win (:shape-player state))}
+                (set (matching-sets (:board state)))
+                (set (:declarations state)))))
+  )
