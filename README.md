@@ -1,12 +1,13 @@
 # telepathic-reagent
 
-Clojurescript implementation of Carl Klutzke's "Telepathic" https://AreYouTelepathic.com
+ClojureScript implementation of Carl Klutzke's "Telepathic" https://AreYouTelepathic.com
 
 ## Overview
 
 <img src="https://i.imgur.com/BuSHFpY.png" alt="Image of the board game 'Telepathic'" width="400"/>
 
-This is an attempt to develop the card game "Telepathic" in a ClojureScript environment. Though the game is still in development, there are pieces that are working.
+This is an attempt to develop the card game "Telepathic" in a ClojureScript environment.
+Though the game is still in development, most of the game is implemented through hot-seat play.
 
 ## Development
 
