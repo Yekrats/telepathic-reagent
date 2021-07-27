@@ -6,7 +6,8 @@
    [cljs.pprint :refer [pprint]]
    [clojure.string :as str]
    [telepathic.logic :refer [condition-asset condition-cards colors define-target do-action
-                             initiate-actions shapes sls tile-asset play-state-losing?]]))
+                             initiate-actions shapes sls tile-asset play-state-losing?
+                             play-state-winning?]]))
 
 (defn new-game []
   {:color-player (condition-cards colors)
@@ -146,6 +147,8 @@
      [:div "The game is lost"]
      [:button {:onClick (fn [_] (reset! app-state (new-game)))}
       "New Game"]]
+    (play-state-winning? @app-state)
+    [:div "You are both TELEPATHIC!"]
     (:declarations @app-state) (str (address-player) " - Make a declaration")
     (nil? (:selected-action @app-state))    (str (address-player) " - Select an action")
     (selected-not-confirmed?)               (str (address-player) " - Confirm the action or select different action")
@@ -169,6 +172,10 @@
   []
   [:div {:class "row"}
    (cond
+     (play-state-winning? @app-state)
+     [:button
+      {:onClick (fn [_] (swap! app-state new-game))}
+      "Play Again"]
      (selected-not-confirmed?)
      [:button
       {:onClick (fn [_] (swap! app-state #(assoc @app-state :action-confirmed true
@@ -178,7 +185,7 @@
      [:button
       {:onClick (fn [_] (swap! app-state #(assoc @app-state :declarations [])))}
       "Declare"]
-     (and (:declarations @app-state) (not (play-state-losing? @app-state)))
+     (:declarations @app-state)
      (render-conditions)
      :else [:div])])
 

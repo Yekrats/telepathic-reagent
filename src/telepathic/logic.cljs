@@ -294,9 +294,7 @@
 (defn play-state-winning?
   ""
   [state]
-
   (= 2 (count  (s/intersection
                 #{(:win (:color-player state)) (:win (:shape-player state))}
                 (set (matching-sets (:board state)))
-                (set (:declarations state)))))
-  )
+                (set (:declarations state))))))
