@@ -121,12 +121,12 @@
 (defn tile-asset
   "Takes in a key-pair (color & shape). Returns the name of the asset." ; :green :bacon => "Green Bacon.png"
   [[c s]]
-  (str "/images/" (str/capitalize (name c)) "%20" (str/capitalize (name s)) ".png"))
+  (str "images/" (str/capitalize (name c)) "-" (str/capitalize (name s)) ".png"))
 
 (defn condition-asset
   ""
   [key]
-  (str "/images/" (name key) "-condition.png"))
+  (str "images/" (name key) "-condition.png"))
 
 (defn push-one-row-forwards
   "Inputs a set of 4, outputs set pushed by one."

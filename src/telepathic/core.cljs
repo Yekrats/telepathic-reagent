@@ -111,7 +111,7 @@
   [:div {:id "action-cards"
          :class (when (select-action-phase?) "highlight")}
    (map-indexed (fn [index action]
-                  [:img {:src (str "/images/" (name action) ".png")
+                  [:img {:src (str "images/" (name action) ".png")
                          :class (str (cond
                                        (= (:selected-action @app-state) action) "selected-action-card "
                                        (some? (:selected-action @app-state)) "non-selected-action-card ")
@@ -128,12 +128,12 @@
   [player]
   [:<>
    [:div {:class "condition-card"}
-    [:img {:src (str "/images/" (player-str player) "-win.png")
+    [:img {:src (str "images/" (player-str player) "-win.png")
            :class "card-image condition-back"}]
     [:img {:src (condition-asset (-> @app-state player :win))
            :class "card-image condition-front"}]]
    [:div {:class "condition-card"}
-    [:img {:src (str "/images/" (player-str player) "-lose.png")
+    [:img {:src (str "images/" (player-str player) "-lose.png")
            :class "card-image condition-back"}]
     [:img {:src (condition-asset (-> @app-state player :lose))
            :class "card-image condition-front"}]]])
