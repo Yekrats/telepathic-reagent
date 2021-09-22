@@ -51,4 +51,55 @@ button { font-size: 200%; }
 
 .highlight { background-color: lightyellow; }
 
+td > img {
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
 td:hover { background-color: lightgreen; }
+
+@keyframes down-one {
+  from {
+		top: 0;
+  }
+  to {
+    top: 157px;
+  }
+}
+
+@keyframes down-two {
+	from {
+		top: 0;
+	}
+	to {
+		top: 314px;
+	}
+}
+
+@keyframes down-three {
+	from {
+		top: 0;
+	}
+	to {
+		top: 471px;
+	}
+}
+
+.animate-down-one {
+	animation-name: down-one;
+  animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+.animate-down-two {
+	animation-name: down-two;
+  animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+.animate-down-three {
+	animation-name: down-three;
+  animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
