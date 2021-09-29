@@ -55,6 +55,9 @@
 (defn selected-not-confirmed? []
   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
 
+(defn selected-and-confirmed? []
+  (and (:action-confirmed @app-state) (some? (:selected-action @app-state))))
+
 (defn select-action-phase? []
   (or (nil? (:selected-action @app-state)) (selected-not-confirmed?)))
 
@@ -88,6 +91,18 @@
                            :declarations (conj (:declarations @app-state) condition)
                            :current-player (other-player))))
 
+(defn apply-animation-classes [row column]
+  (when (selected-and-confirmed?)
+    (do
+     (when (and (= row 0) (= column 3))
+       "animate-down-one")
+     (when (and (= row 1) (= column 3))
+       "animate-down-two")
+     (when (and (= row 2) (= column 3))
+       "animate-down-three")
+     (when (and (= row 3) (= column 3))
+       "animate-up-three"))))
+
 (defn render-board
   "Render the game board (16 tiles) from app state."
   []
@@ -98,7 +113,7 @@
                     (map-indexed (fn [col-index card]
                                    [:td {:key col-index}
                                     [:img {:src     (tile-asset card)
-                                           :class   "card-image"
+                                           :class   (str "card-image" " " (apply-animation-classes row-index col-index))
                                            :onClick (fn [_]
                                                       (when (and (:action-confirmed @app-state) (not (play-state-losing? @app-state)))
                                                         (deck-manipulations row-index col-index)))}]])

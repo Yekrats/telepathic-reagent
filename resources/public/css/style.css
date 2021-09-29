@@ -86,6 +86,14 @@ td:hover { background-color: lightgreen; }
 	}
 }
 
+@keyframes up-three {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: -118px; left: 40px; animation-timing-function: linear;}
+	50% { top: -236px; left: 50px; animation-timing-function: linear;}	
+	75% { top: -354px; left: 40px; animation-timing-function: linear;}
+	100% { top: -471px; left: 0; animation-timing-function: ease-out;}
+}
+
 .animate-down-one {
 	animation-name: down-one;
   animation-duration: 1s;
@@ -100,6 +108,12 @@ td:hover { background-color: lightgreen; }
 
 .animate-down-three {
 	animation-name: down-three;
+  animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+.animate-up-three {
+	animation-name: up-three;
   animation-duration: 1s;
 	animation-fill-mode: forwards;
 }
