@@ -17,12 +17,24 @@
    :selected-action nil
    :action-confirmed nil
    :current-player :color-player
-   :declarations nil})
+   :declarations nil
+   :animation-classes nil})
 
 (defonce app-state (atom (new-game)))
 
 (defn get-app-element []
   (gdom/getElement "app"))
+
+(defn animate-col-south [empty col-index]
+  (reduce (fn [row]
+            "If index 0-2, replace first item with animate-down-one. If index 3, replace with animate-up-three"
+            (if ))
+          empty))
+
+(defn animation-classes [action row-index col-index]
+  (let [empty (vec (repeat 4 (vec (repeat 4 ""))))])
+  (cond (= action :col-south)
+        (animate-col-south empty col-index)))
 
 (defn deck-manipulations
   "Perform manipulations on the tile board and card deck based on player activities."
@@ -39,18 +51,27 @@
                      (subvec available (inc selected-index))))]
     (swap! app-state
            #(assoc @app-state
-                   :board (do-action (:board @app-state)
-                                     (define-target tile-index)
-                                     (:selected-action @app-state))
-                   :selected-action nil
-                   :action-confirmed nil
-                   :actions {:available
-                             (if top-card
-                               (conj rest-of-available top-card) ; Add the top card of the avail to the available cards.
-                               rest-of-available) ; Or, if no top card, just use what's available.
-                             :deck rest-of-deck  ; The deck will be the "rest" -- all but the first card.
-                             :discard (conj discard selected)}   ; Adding the selected card to the end of the discard pile
-                   ))))
+                   :animation-classes [["animate-down-one" "" "" ""]
+                                       ["animate-down-one" "" "" ""]
+                                       ["animate-down-one" "" "" ""]
+                                       ["animate-up-three" "" "" ""]]))
+    (js/setTimeout
+     (fn []
+       (swap! app-state
+              #(assoc @app-state
+                      :board (do-action (:board @app-state)
+                                        (define-target tile-index)
+                                        (:selected-action @app-state))
+                      :selected-action nil
+                      :action-confirmed nil
+                      :actions {:available
+                                (if top-card
+                                  (conj rest-of-available top-card) ; Add the top card of the avail to the available cards.
+                                  rest-of-available) ; Or, if no top card, just use what's available.
+                                :deck rest-of-deck ; The deck will be the "rest" -- all but the first card.
+                                :discard (conj discard selected)} ; Adding the selected card to the end of the discard pile
+                      :animation-classes nil)))
+     1500)))
 
 (defn selected-not-confirmed? []
   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
@@ -93,15 +114,16 @@
 
 (defn apply-animation-classes [row column]
   (when (selected-and-confirmed?)
-    (do
-     (when (and (= row 0) (= column 3))
-       "animate-down-one")
-     (when (and (= row 1) (= column 3))
-       "animate-down-two")
-     (when (and (= row 2) (= column 3))
-       "animate-down-three")
-     (when (and (= row 3) (= column 3))
-       "animate-up-three"))))
+    (cond (and (= row 0) (= column 3))
+          "animate-down-one"
+          (and (= row 1) (= column 3))
+          "animate-down-one"
+          (and (= row 2) (= column 3))
+          "animate-down-one"
+          (and (= row 3) (= column 3))
+          "animate-up-three"
+          :else
+          "")))
 
 (defn render-board
   "Render the game board (16 tiles) from app state."
@@ -113,7 +135,10 @@
                     (map-indexed (fn [col-index card]
                                    [:td {:key col-index}
                                     [:img {:src     (tile-asset card)
-                                           :class   (str "card-image" " " (apply-animation-classes row-index col-index))
+                                           :class   (str "card-image" " " (and (some? (:animation-classes @app-state))
+                                                                               (get
+                                                                                (get (:animation-classes @app-state) row-index)
+                                                                                col-index)))
                                            :onClick (fn [_]
                                                       (when (and (:action-confirmed @app-state) (not (play-state-losing? @app-state)))
                                                         (deck-manipulations row-index col-index)))}]])
