@@ -25,16 +25,29 @@
 (defn get-app-element []
   (gdom/getElement "app"))
 
-(defn animate-col-south [empty col-index]
-  (reduce (fn [row]
-            "If index 0-2, replace first item with animate-down-one. If index 3, replace with animate-up-three"
-            (if ))
-          empty))
+(defn add-animation-to-row [col-index animation]
+  (into [] (concat (repeat col-index "") (list animation) (repeat (- 3 col-index) "")))
+   )
+
+(defn animate-col-south [col-index]
+  (conj (vec (repeat 3 (add-animation-to-row col-index "animate-down-one")))
+        (add-animation-to-row col-index "animate-up-three")))
+
+(defn animate-col-north [col-index]
+  (into [] (concat (vector (add-animation-to-row col-index "animate-down-three"))
+       (repeat 3 (add-animation-to-row col-index "animate-up-one")))))
+
+(defn animate-ns-reverse [col-index]
+ [ (add-animation-to-row col-index "animate-down-three")
+   (add-animation-to-row col-index "animate-down-one")
+   (add-animation-to-row col-index "animate-up-one")
+   (add-animation-to-row col-index "animate-up-three")]
+  )
 
 (defn animation-classes [action row-index col-index]
   (let [empty (vec (repeat 4 (vec (repeat 4 ""))))])
   (cond (= action :col-south)
-        (animate-col-south empty col-index)))
+        (animate-col-south col-index)))
 
 (defn deck-manipulations
   "Perform manipulations on the tile board and card deck based on player activities."
