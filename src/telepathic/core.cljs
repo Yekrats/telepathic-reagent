@@ -26,8 +26,7 @@
   (gdom/getElement "app"))
 
 (defn add-animation-to-row [col-index animation]
-  (into [] (concat (repeat col-index "") (list animation) (repeat (- 3 col-index) "")))
-   )
+  (into [] (concat (repeat col-index "") (list animation) (repeat (- 3 col-index) ""))))
 
 (defn animate-col-south [col-index]
   (conj (vec (repeat 3 (add-animation-to-row col-index "animate-down-one")))
@@ -38,16 +37,22 @@
        (repeat 3 (add-animation-to-row col-index "animate-up-one")))))
 
 (defn animate-ns-reverse [col-index]
- [ (add-animation-to-row col-index "animate-down-three")
-   (add-animation-to-row col-index "animate-down-one")
+ [(add-animation-to-row col-index "animate-down-three")
+  (add-animation-to-row col-index "animate-down-one")
+  (add-animation-to-row col-index "animate-up-one")
+  (add-animation-to-row col-index "animate-up-three")])
+
+(defn animate-ns-do-si-do [col-index]
+  [(add-animation-to-row col-index "animate-down-one")
    (add-animation-to-row col-index "animate-up-one")
-   (add-animation-to-row col-index "animate-up-three")]
-  )
+   (add-animation-to-row col-index "animate-down-one")
+   (add-animation-to-row col-index "animate-up-one")])
 
 (defn animation-classes [action row-index col-index]
-  (let [empty (vec (repeat 4 (vec (repeat 4 ""))))])
-  (cond (= action :col-south)
-        (animate-col-south col-index)))
+  (cond (= action :col-south) (animate-col-south col-index)
+        (= action :col-north) (animate-col-north col-index)
+        (= action :ns-reverse) (animate-ns-reverse col-index)
+        (= action :ns-do-si-do) (animate-ns-do-si-do col-index)))
 
 (defn deck-manipulations
   "Perform manipulations on the tile board and card deck based on player activities."
