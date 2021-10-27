@@ -48,6 +48,13 @@
    (add-animation-to-row col-index "animate-down-one")
    (add-animation-to-row col-index "animate-up-one")])
 
+(def blank-animation-row ["" "" "" ""])
+
+(defn animate-row-east [row-index]
+  (into [] (concat (repeat row-index blank-animation-row)
+                   [["animate-right-one" "animate-right-one" "animate-right-one" "animate-left-three"]]
+                   (repeat (- 3 row-index) blank-animation-row))))
+
 (defn animation-classes [action row-index col-index]
   (cond (= action :col-south) (animate-col-south col-index)
         (= action :col-north) (animate-col-north col-index)
