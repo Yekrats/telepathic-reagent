@@ -12,3 +12,5 @@ pom.xml
 .cpcache/
 .rebel_readline_history
 resources/public/cljs-out
+/.lsp/
+/node_modules/.cache/
