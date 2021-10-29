@@ -30,36 +30,44 @@
 
 (defn animate-col-south [col-index]
   (conj (vec (repeat 3 (add-animation-to-row col-index "animate-down-one")))
-        (add-animation-to-row col-index "animate-up-three")))
+        (add-animation-to-row col-index "animate-up-three-arc")))
 
 (defn animate-col-north [col-index]
-  (into [] (concat (vector (add-animation-to-row col-index "animate-down-three"))
+  (into [] (concat (vector (add-animation-to-row col-index "animate-down-three-arc"))
        (repeat 3 (add-animation-to-row col-index "animate-up-one")))))
 
 (defn animate-ns-reverse [col-index]
- [(add-animation-to-row col-index "animate-down-three")
-  (add-animation-to-row col-index "animate-down-one")
-  (add-animation-to-row col-index "animate-up-one")
-  (add-animation-to-row col-index "animate-up-three")])
+ [(add-animation-to-row col-index "animate-down-three-arc")
+  (add-animation-to-row col-index "animate-down-one-arc")
+  (add-animation-to-row col-index "animate-up-one-arc")
+  (add-animation-to-row col-index "animate-up-three-arc")])
 
 (defn animate-ns-do-si-do [col-index]
-  [(add-animation-to-row col-index "animate-down-one")
-   (add-animation-to-row col-index "animate-up-one")
-   (add-animation-to-row col-index "animate-down-one")
-   (add-animation-to-row col-index "animate-up-one")])
+  [(add-animation-to-row col-index "animate-down-one-arc")
+   (add-animation-to-row col-index "animate-up-one-arc")
+   (add-animation-to-row col-index "animate-down-one-arc")
+   (add-animation-to-row col-index "animate-up-one-arc")])
 
 (def blank-animation-row ["" "" "" ""])
 
 (defn animate-row-east [row-index]
   (into [] (concat (repeat row-index blank-animation-row)
-                   [["animate-right-one" "animate-right-one" "animate-right-one" "animate-left-three"]]
+                   [["animate-right-one" "animate-right-one" "animate-right-one" "animate-left-three-arc"]]
                    (repeat (- 3 row-index) blank-animation-row))))
 
-(defn animation-classes [action row-index col-index]
-  (cond (= action :col-south) (animate-col-south col-index)
-        (= action :col-north) (animate-col-north col-index)
-        (= action :ns-reverse) (animate-ns-reverse col-index)
-        (= action :ns-do-si-do) (animate-ns-do-si-do col-index)))
+(defn animate-row-west [row-index]
+  (into [] (concat (repeat row-index blank-animation-row)
+                   [["animate-right-three-arc" "animate-left-one" "animate-left-one" "animate-left-one"]]
+                   (repeat (- 3 row-index) blank-animation-row))))
+
+(defn animation-classes [row-index col-index]
+  (case (:selected-action @app-state)
+      :col-south (animate-col-south col-index)
+      :col-north (animate-col-north col-index)
+      :ns-reverse (animate-ns-reverse col-index)
+      :ns-do-si-do (animate-ns-do-si-do col-index)
+      :row-east (animate-row-east row-index)
+      :row-west (animate-row-west row-index)))
 
 (defn deck-manipulations
   "Perform manipulations on the tile board and card deck based on player activities."
@@ -76,10 +84,7 @@
                      (subvec available (inc selected-index))))]
     (swap! app-state
            #(assoc @app-state
-                   :animation-classes [["animate-down-one" "" "" ""]
-                                       ["animate-down-one" "" "" ""]
-                                       ["animate-down-one" "" "" ""]
-                                       ["animate-up-three" "" "" ""]]))
+                   :animation-classes (animation-classes row-index col-index)))
     (js/setTimeout
      (fn []
        (swap! app-state

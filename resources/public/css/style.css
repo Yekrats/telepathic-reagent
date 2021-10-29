@@ -85,13 +85,73 @@ td:hover { background-color: lightgreen; }
 		top: 471px;
 	}
 }
-
-@keyframes up-three {
+@keyframes up-one {
+  from {
+		top: 0;
+  }
+  to {
+    top: -157px;
+  }
+}
+@keyframes up-three-arc {
 	0% { top: 0; left: 0; animation-timing-function: ease-in;}
-	25% { top: -118px; left: 40px; animation-timing-function: linear;}
-	50% { top: -236px; left: 50px; animation-timing-function: linear;}	
-	75% { top: -354px; left: 40px; animation-timing-function: linear;}
+	25% { top: -118px; left: -80px; animation-timing-function: linear;}
+	50% { top: -236px; left: -100px; animation-timing-function: linear;}
+	75% { top: -354px; left: -80px; animation-timing-function: linear;}
 	100% { top: -471px; left: 0; animation-timing-function: ease-out;}
+}
+
+@keyframes up-one-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: -39px; left: -40px; animation-timing-function: linear;}
+	50% { top: -78px; left: -50px; animation-timing-function: linear;}
+	75% { top: -117px; left: -40px; animation-timing-function: linear;}
+	100% { top: -157px; left: 0; animation-timing-function: ease-out;}}
+
+@keyframes down-one-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: 39px; left: 40px; animation-timing-function: linear;}
+	50% { top: 78px; left: 50px; animation-timing-function: linear;}
+	75% { top: 117px; left: 40px; animation-timing-function: linear;}
+	100% { top: 157px; left: 0; animation-timing-function: ease-out;}}
+
+@keyframes down-three-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: 118px; left: 80px; animation-timing-function: linear;}
+	50% { top: 236px; left: 100px; animation-timing-function: linear;}
+	75% { top: 354px; left: 80px; animation-timing-function: linear;}
+	100% { top: 471px; left: 0; animation-timing-function: ease-out;}
+}
+
+@keyframes right-one {
+  from {
+		left: 0;
+  }
+  to {
+    left: 157px;
+  }
+}
+@keyframes left-three-arc {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: -118px; top: 80px; animation-timing-function: linear;}
+	50% { left: -236px; top: 100px; animation-timing-function: linear;}
+	75% { left: -354px; top: 80px; animation-timing-function: linear;}
+	100% { left: -471px; top: 0; animation-timing-function: ease-out;}
+}
+@keyframes left-one {
+  from {
+		left: 0;
+  }
+  to {
+    left: -157px;
+  }
+}
+@keyframes right-three-arc {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: 118px; top: -80px; animation-timing-function: linear;}
+	50% { left: 236px; top: -100px; animation-timing-function: linear;}
+	75% { left: 354px; top: -80px; animation-timing-function: linear;}
+	100% { left: 471px; top: 0; animation-timing-function: ease-out;}
 }
 
 .animate-down-one {
@@ -106,14 +166,52 @@ td:hover { background-color: lightgreen; }
 	animation-fill-mode: forwards;
 }
 
-.animate-down-three {
-	animation-name: down-three;
+.animate-down-three-arc {
+	animation-name: down-three-arc;
   animation-duration: 1s;
 	animation-fill-mode: forwards;
 }
 
-.animate-up-three {
-	animation-name: up-three;
+.animate-up-one {
+    animation-name: up-one;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.animate-up-three-arc {
+	animation-name: up-three-arc;
   animation-duration: 1s;
 	animation-fill-mode: forwards;
+}
+.animate-up-one-arc {
+    animation-name: up-one-arc;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.animate-down-one-arc {
+    animation-name: down-one-arc;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.animate-right-one {
+    animation-name: right-one;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.animate-left-one {
+    animation-name: left-one;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.animate-left-three-arc {
+    animation-name: left-three-arc;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.animate-right-three-arc {
+    animation-name: right-three-arc;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
 }
