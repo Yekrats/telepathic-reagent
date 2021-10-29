@@ -28,6 +28,8 @@
 (defn add-animation-to-row [col-index animation]
   (into [] (concat (repeat col-index "") (list animation) (repeat (- 3 col-index) ""))))
 
+(def blank-animation-row ["" "" "" ""])
+
 (defn animate-col-south [col-index]
   (conj (vec (repeat 3 (add-animation-to-row col-index "animate-down-one")))
         (add-animation-to-row col-index "animate-up-three-arc")))
@@ -47,8 +49,6 @@
    (add-animation-to-row col-index "animate-up-one-arc")
    (add-animation-to-row col-index "animate-down-one-arc")
    (add-animation-to-row col-index "animate-up-one-arc")])
-
-(def blank-animation-row ["" "" "" ""])
 
 (defn animate-row-east [row-index]
   (into [] (concat (repeat row-index blank-animation-row)
@@ -101,7 +101,7 @@
                                 :deck rest-of-deck ; The deck will be the "rest" -- all but the first card.
                                 :discard (conj discard selected)} ; Adding the selected card to the end of the discard pile
                       :animation-classes nil)))
-     1500)))
+     1100)))
 
 (defn selected-not-confirmed? []
   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))
@@ -165,10 +165,12 @@
                     (map-indexed (fn [col-index card]
                                    [:td {:key col-index}
                                     [:img {:src     (tile-asset card)
-                                           :class   (str "card-image" " " (and (some? (:animation-classes @app-state))
-                                                                               (get
-                                                                                (get (:animation-classes @app-state) row-index)
-                                                                                col-index)))
+                                           :class   (str "card-image"
+                                                         " "
+                                                         (and (some? (:animation-classes @app-state))
+                                                              (str "animate "
+                                                                   (get
+                                                                    (get (:animation-classes @app-state) row-index) col-index))))
                                            :onClick (fn [_]
                                                       (when (and (:action-confirmed @app-state) (not (play-state-losing? @app-state)))
                                                         (deck-manipulations row-index col-index)))}]])

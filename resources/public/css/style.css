@@ -1,22 +1,25 @@
 body, input, button, select, option, textarea {
-    font-family: Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 body {
-    font-size: 15px;
+  font-size: 15px;
 }
 input, select, option, textarea {
-    font-size: 100%;
+  font-size: 100%;
 }
 
 button { font-size: 200%; }
 
 #instructions  { font-size: 30px; text-align: center; margin-top: 20px; }
 
+#upper-area { min-height: 60px; }
+
 #upper-area > div { min-height: 30px; }
 
 #condition-cards img { width: 150px; margin-right: 5px; margin-left: 5px; }
 
 .card-image { width: 150px; height: 150px; }
+.card-image:hover { background-color: lightgreen; }
 
 #action-cards {
 	margin-left: 50px;
@@ -57,8 +60,6 @@ td > img {
 	left: 0;
 }
 
-td:hover { background-color: lightgreen; }
-
 @keyframes down-one {
   from {
 		top: 0;
@@ -66,6 +67,14 @@ td:hover { background-color: lightgreen; }
   to {
     top: 157px;
   }
+}
+
+@keyframes down-one-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: 39px; left: 40px; animation-timing-function: linear;}
+	50% { top: 78px; left: 50px; animation-timing-function: linear;}
+	75% { top: 117px; left: 40px; animation-timing-function: linear;}
+	100% { top: 157px; left: 0; animation-timing-function: ease-out;}
 }
 
 @keyframes down-two {
@@ -77,14 +86,14 @@ td:hover { background-color: lightgreen; }
 	}
 }
 
-@keyframes down-three {
-	from {
-		top: 0;
-	}
-	to {
-		top: 471px;
-	}
+@keyframes down-three-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: 118px; left: 80px; animation-timing-function: linear;}
+	50% { top: 236px; left: 100px; animation-timing-function: linear;}
+	75% { top: 354px; left: 80px; animation-timing-function: linear;}
+	100% { top: 471px; left: 0; animation-timing-function: ease-out;}
 }
+
 @keyframes up-one {
   from {
 		top: 0;
@@ -93,6 +102,15 @@ td:hover { background-color: lightgreen; }
     top: -157px;
   }
 }
+
+@keyframes up-one-arc {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: -39px; left: -40px; animation-timing-function: linear;}
+	50% { top: -78px; left: -50px; animation-timing-function: linear;}
+	75% { top: -117px; left: -40px; animation-timing-function: linear;}
+	100% { top: -157px; left: 0; animation-timing-function: ease-out;}
+}
+
 @keyframes up-three-arc {
 	0% { top: 0; left: 0; animation-timing-function: ease-in;}
 	25% { top: -118px; left: -80px; animation-timing-function: linear;}
@@ -101,27 +119,6 @@ td:hover { background-color: lightgreen; }
 	100% { top: -471px; left: 0; animation-timing-function: ease-out;}
 }
 
-@keyframes up-one-arc {
-	0% { top: 0; left: 0; animation-timing-function: ease-in;}
-	25% { top: -39px; left: -40px; animation-timing-function: linear;}
-	50% { top: -78px; left: -50px; animation-timing-function: linear;}
-	75% { top: -117px; left: -40px; animation-timing-function: linear;}
-	100% { top: -157px; left: 0; animation-timing-function: ease-out;}}
-
-@keyframes down-one-arc {
-	0% { top: 0; left: 0; animation-timing-function: ease-in;}
-	25% { top: 39px; left: 40px; animation-timing-function: linear;}
-	50% { top: 78px; left: 50px; animation-timing-function: linear;}
-	75% { top: 117px; left: 40px; animation-timing-function: linear;}
-	100% { top: 157px; left: 0; animation-timing-function: ease-out;}}
-
-@keyframes down-three-arc {
-	0% { top: 0; left: 0; animation-timing-function: ease-in;}
-	25% { top: 118px; left: 80px; animation-timing-function: linear;}
-	50% { top: 236px; left: 100px; animation-timing-function: linear;}
-	75% { top: 354px; left: 80px; animation-timing-function: linear;}
-	100% { top: 471px; left: 0; animation-timing-function: ease-out;}
-}
 
 @keyframes right-one {
   from {
@@ -131,13 +128,7 @@ td:hover { background-color: lightgreen; }
     left: 157px;
   }
 }
-@keyframes left-three-arc {
-	0% { left: 0; top: 0; animation-timing-function: ease-in;}
-	25% { left: -118px; top: 80px; animation-timing-function: linear;}
-	50% { left: -236px; top: 100px; animation-timing-function: linear;}
-	75% { left: -354px; top: 80px; animation-timing-function: linear;}
-	100% { left: -471px; top: 0; animation-timing-function: ease-out;}
-}
+
 @keyframes left-one {
   from {
 		left: 0;
@@ -146,6 +137,15 @@ td:hover { background-color: lightgreen; }
     left: -157px;
   }
 }
+
+@keyframes left-three-arc {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: -118px; top: 80px; animation-timing-function: linear;}
+	50% { left: -236px; top: 100px; animation-timing-function: linear;}
+	75% { left: -354px; top: 80px; animation-timing-function: linear;}
+	100% { left: -471px; top: 0; animation-timing-function: ease-out;}
+}
+
 @keyframes right-three-arc {
 	0% { left: 0; top: 0; animation-timing-function: ease-in;}
 	25% { left: 118px; top: -80px; animation-timing-function: linear;}
@@ -154,64 +154,51 @@ td:hover { background-color: lightgreen; }
 	100% { left: 471px; top: 0; animation-timing-function: ease-out;}
 }
 
-.animate-down-one {
-	animation-name: down-one;
+.animate {
   animation-duration: 1s;
 	animation-fill-mode: forwards;
+}
+
+.animate-down-one {
+	animation-name: down-one;
+}
+
+.animate-down-one-arc {
+  animation-name: down-one-arc;
 }
 
 .animate-down-two {
 	animation-name: down-two;
-  animation-duration: 1s;
-	animation-fill-mode: forwards;
 }
 
 .animate-down-three-arc {
 	animation-name: down-three-arc;
-  animation-duration: 1s;
-	animation-fill-mode: forwards;
 }
 
 .animate-up-one {
-    animation-name: up-one;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-}
-.animate-up-three-arc {
-	animation-name: up-three-arc;
-  animation-duration: 1s;
-	animation-fill-mode: forwards;
-}
-.animate-up-one-arc {
-    animation-name: up-one-arc;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+  animation-name: up-one;
 }
 
-.animate-down-one-arc {
-    animation-name: down-one-arc;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+.animate-up-one-arc {
+  animation-name: up-one-arc;
+}
+
+.animate-up-three-arc {
+	animation-name: up-three-arc;
 }
 
 .animate-right-one {
-    animation-name: right-one;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+  animation-name: right-one;
 }
 
 .animate-left-one {
-    animation-name: left-one;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+  animation-name: left-one;
 }
+
 .animate-left-three-arc {
-    animation-name: left-three-arc;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+  animation-name: left-three-arc;
 }
+
 .animate-right-three-arc {
-    animation-name: right-three-arc;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+  animation-name: right-three-arc;
 }
