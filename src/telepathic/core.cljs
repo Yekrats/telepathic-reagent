@@ -30,6 +30,8 @@
 
 (def blank-animation-row ["" "" "" ""])
 
+(def blank-animation-board (repeat 4 blank-animation-row))
+
 (defn animate-col-south [col-index]
   (conj (vec (repeat 3 (add-animation-to-row col-index "animate-down-one")))
         (add-animation-to-row col-index "animate-up-three-arc")))
@@ -52,13 +54,68 @@
 
 (defn animate-row-east [row-index]
   (into [] (concat (repeat row-index blank-animation-row)
-                   [["animate-right-one" "animate-right-one" "animate-right-one" "animate-left-three-arc"]]
+                   [["animate-right-one"
+                     "animate-right-one"
+                     "animate-right-one"
+                     "animate-left-three-arc"]]
                    (repeat (- 3 row-index) blank-animation-row))))
 
 (defn animate-row-west [row-index]
   (into [] (concat (repeat row-index blank-animation-row)
-                   [["animate-right-three-arc" "animate-left-one" "animate-left-one" "animate-left-one"]]
+                   [["animate-right-three-arc"
+                     "animate-left-one"
+                     "animate-left-one"
+                     "animate-left-one"]]
                    (repeat (- 3 row-index) blank-animation-row))))
+
+(defn animate-ew-do-si-do [row-index]
+  (into [] (concat (repeat row-index blank-animation-row)
+                   [["animate-right-one-arc"
+                     "animate-left-one-arc"
+                     "animate-right-one-arc"
+                     "animate-left-one-arc"]]
+                   (repeat (- 3 row-index) blank-animation-row))))
+
+(defn animate-ew-reverse [row-index]
+  (into [] (concat (repeat row-index blank-animation-row)
+                   [["animate-right-three-arc"
+                     "animate-right-one-arc"
+                     "animate-left-one-arc"
+                     "animate-left-three-arc"]]
+                   (repeat (- 3 row-index) blank-animation-row))))
+
+(defn quadrant [row-index col-index]
+  (let [row-quad-index (int (Math/floor (/ row-index 2)))
+        col-quad-index (int (Math/floor (/ col-index 2)))]
+    (list row-quad-index col-quad-index)))
+
+(defn animate-corner-clockwise [row-index col-index]
+  (let [clicked-quadrant (quadrant row-index col-index)]
+    (into [] (map (fn [row]
+                   (into [] (map (fn [col]
+                                   (if (not= (quadrant row col) clicked-quadrant)
+                                     ""
+                                     (cond
+                                       (and (even? row) (even? col)) "animate-right-one-arc"
+                                       (and (even? row) (odd? col)) "animate-down-one-arc"
+                                       (and (odd? row) (odd? col)) "animate-left-one-arc"
+                                       (and (odd? row) (even? col)) "animate-up-one-arc")))
+                                 (range 4))))
+                 (range 4)))))
+
+(defn animate-corner-counterclockwise [row-index, col-index]
+  (let [clicked-quadrant (quadrant row-index col-index)]
+    (into [] (map (fn [row]
+                   (into [] (map (fn [col]
+                                   (if (not= (quadrant row col) clicked-quadrant)
+                                     ""
+                                     (cond
+                                       (and (even? row) (even? col)) "animate-down-one-arc"
+                                       (and (even? row) (odd? col)) "animate-left-one-arc"
+                                       (and (odd? row) (odd? col)) "animate-up-one-arc"
+                                       (and (odd? row) (even? col)) "animate-right-one-arc")))
+                                 (range 4))))
+                 (range 4)))))
 
 (defn animation-classes [row-index col-index]
   (case (:selected-action @app-state)
@@ -67,7 +124,11 @@
       :ns-reverse (animate-ns-reverse col-index)
       :ns-do-si-do (animate-ns-do-si-do col-index)
       :row-east (animate-row-east row-index)
-      :row-west (animate-row-west row-index)))
+      :row-west (animate-row-west row-index)
+      :ew-do-si-do (animate-ew-do-si-do row-index)
+      :ew-reverse (animate-ew-reverse row-index)
+      :corner-clockwise (animate-corner-clockwise row-index col-index)
+      :corner-counterclockwise (animate-corner-counterclockwise row-index col-index)))
 
 (defn deck-manipulations
   "Perform manipulations on the tile board and card deck based on player activities."
@@ -101,7 +162,7 @@
                                 :deck rest-of-deck ; The deck will be the "rest" -- all but the first card.
                                 :discard (conj discard selected)} ; Adding the selected card to the end of the discard pile
                       :animation-classes nil)))
-     1100)))
+     1000)))
 
 (defn selected-not-confirmed? []
   (and (not (:action-confirmed @app-state)) (some? (:selected-action @app-state))))

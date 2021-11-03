@@ -129,6 +129,14 @@ td > img {
   }
 }
 
+@keyframes right-one-arc {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: 39px; top: -40px; animation-timing-function: linear;}
+	50% { left: 78px; top: -50px; animation-timing-function: linear;}
+	75% { left: 117px; top: -40px; animation-timing-function: linear;}
+	100% { left: 157px; top: 0; animation-timing-function: ease-out;}
+}
+
 @keyframes left-one {
   from {
 		left: 0;
@@ -136,6 +144,14 @@ td > img {
   to {
     left: -157px;
   }
+}
+
+@keyframes left-one-arc {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: -39px; top: 40px; animation-timing-function: linear;}
+	50% { left: -78px; top: 50px; animation-timing-function: linear;}
+	75% { left: -117px; top: 40px; animation-timing-function: linear;}
+	100% { left: -157px; top: 0; animation-timing-function: ease-out;}
 }
 
 @keyframes left-three-arc {
@@ -191,8 +207,16 @@ td > img {
   animation-name: right-one;
 }
 
+.animate-right-one-arc {
+	animation-name: right-one-arc;
+}
+
 .animate-left-one {
   animation-name: left-one;
+}
+
+.animate-left-one-arc {
+	animation-name: left-one-arc;
 }
 
 .animate-left-three-arc {
