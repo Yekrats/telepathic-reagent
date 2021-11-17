@@ -110,10 +110,10 @@
                                    (if (not= (quadrant row col) clicked-quadrant)
                                      ""
                                      (cond
-                                       (and (even? row) (even? col)) "animate-down-one-arc"
-                                       (and (even? row) (odd? col)) "animate-left-one-arc"
-                                       (and (odd? row) (odd? col)) "animate-up-one-arc"
-                                       (and (odd? row) (even? col)) "animate-right-one-arc")))
+                                       (and (even? row) (even? col)) "animate-down-one-arc-widdershins"
+                                       (and (even? row) (odd? col)) "animate-left-one-arc-widdershins"
+                                       (and (odd? row) (odd? col)) "animate-up-one-arc-widdershins"
+                                       (and (odd? row) (even? col)) "animate-right-one-arc-widdershins")))
                                  (range 4))))
                  (range 4)))))
 

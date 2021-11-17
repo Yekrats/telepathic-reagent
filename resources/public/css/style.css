@@ -77,6 +77,14 @@ td > img {
 	100% { top: 157px; left: 0; animation-timing-function: ease-out;}
 }
 
+@keyframes down-one-arc-widdershins {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: 39px; left: -40px; animation-timing-function: linear;}
+	50% { top: 78px; left: -50px; animation-timing-function: linear;}
+	75% { top: 117px; left: -40px; animation-timing-function: linear;}
+	100% { top: 157px; left: 0; animation-timing-function: ease-out;}
+}
+
 @keyframes down-two {
 	from {
 		top: 0;
@@ -110,6 +118,13 @@ td > img {
 	75% { top: -117px; left: -40px; animation-timing-function: linear;}
 	100% { top: -157px; left: 0; animation-timing-function: ease-out;}
 }
+@keyframes up-one-arc-widdershins {
+	0% { top: 0; left: 0; animation-timing-function: ease-in;}
+	25% { top: -39px; left: 40px; animation-timing-function: linear;}
+	50% { top: -78px; left: 50px; animation-timing-function: linear;}
+	75% { top: -117px; left: 40px; animation-timing-function: linear;}
+	100% { top: -157px; left: 0; animation-timing-function: ease-out;}
+}
 
 @keyframes up-three-arc {
 	0% { top: 0; left: 0; animation-timing-function: ease-in;}
@@ -136,6 +151,14 @@ td > img {
 	75% { left: 117px; top: -40px; animation-timing-function: linear;}
 	100% { left: 157px; top: 0; animation-timing-function: ease-out;}
 }
+ @keyframes right-one-arc-widdershins {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: 39px; top: 40px; animation-timing-function: linear;}
+	50% { left: 78px; top: 50px; animation-timing-function: linear;}
+	75% { left: 117px; top: 40px; animation-timing-function: linear;}
+	100% { left: 157px; top: 0; animation-timing-function: ease-out;}
+}
+
 
 @keyframes left-one {
   from {
@@ -151,6 +174,14 @@ td > img {
 	25% { left: -39px; top: 40px; animation-timing-function: linear;}
 	50% { left: -78px; top: 50px; animation-timing-function: linear;}
 	75% { left: -117px; top: 40px; animation-timing-function: linear;}
+	100% { left: -157px; top: 0; animation-timing-function: ease-out;}
+}
+
+@keyframes left-one-arc-widdershins {
+	0% { left: 0; top: 0; animation-timing-function: ease-in;}
+	25% { left: -39px; top: -40px; animation-timing-function: linear;}
+	50% { left: -78px; top: -50px; animation-timing-function: linear;}
+	75% { left: -117px; top: -40px; animation-timing-function: linear;}
 	100% { left: -157px; top: 0; animation-timing-function: ease-out;}
 }
 
@@ -183,6 +214,10 @@ td > img {
   animation-name: down-one-arc;
 }
 
+.animate-down-one-arc-widdershins {
+  animation-name: down-one-arc-widdershins;
+}
+
 .animate-down-two {
 	animation-name: down-two;
 }
@@ -199,6 +234,10 @@ td > img {
   animation-name: up-one-arc;
 }
 
+.animate-up-one-arc-widdershins {
+  animation-name: up-one-arc-widdershins;
+}
+
 .animate-up-three-arc {
 	animation-name: up-three-arc;
 }
@@ -211,12 +250,20 @@ td > img {
 	animation-name: right-one-arc;
 }
 
+.animate-right-one-arc-widdershins {
+	animation-name: right-one-arc-widdershins;
+}
+
 .animate-left-one {
   animation-name: left-one;
 }
 
 .animate-left-one-arc {
 	animation-name: left-one-arc;
+}
+
+.animate-left-one-arc-widdershins {
+	animation-name: left-one-arc-widdershins;
 }
 
 .animate-left-three-arc {
