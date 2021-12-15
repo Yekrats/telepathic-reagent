@@ -1,0 +1,39 @@
+* State Management
+** remove :actionConfirmed from state
+** Server state
+{:color-player
+:shape-player
+:board
+:actions
+:selected-action
+:current-player
+:declarations
+:actionLocation}
+* Endpoints
+** POST /api/selectAction
+*** body
+**** action (key)
+**** playerId
+*** business logic
+**** Validate that the action passed is one of the available actions
+*** Update state
+**** :selectedAction
+*** Return state
+** POST /api/confirmAction
+*** Update state
+**** :currentPlayer
+*** Return state
+** POST /api/applyAction
+*** body
+**** actionLocation
+*** Update state
+**** :board
+**** :actions
+**** :selected-action
+**** :current-player
+**** :action-location
+*** Return state
+* Ring Middleware
+** Validate the playerId is the current player
+* Client
+** send playerId with every request
