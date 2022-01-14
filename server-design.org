@@ -12,19 +12,17 @@
 :declarations
 :actionLocation}}
 * Endpoints
+Every endpoint method should return the :gameState for the :gameId in the request
 ** POST /api/selectAction
 *** body
 **** action (key)
-**** playerId
 *** business logic
 **** Validate that the action passed is one of the available actions
 *** Update state
 **** :selectedAction
-*** Return state
 ** POST /api/confirmAction
 *** Update state
-**** :currentPlayer
-*** Return state
+**** :current-player
 ** POST /api/applyAction
 *** body
 **** actionLocation
@@ -34,21 +32,19 @@
 **** :selected-action
 **** :current-player
 **** :action-location
-*** Return state
 ** GET /api/startGame NEXT 1
 *** Update state
 **** Generate a  new game & add it to the global state
-***** Return the gameid and its state
 ***** Assigns condition cards to the starting player (randomly color or shape player)
-** GET /api/joinGame NEXT 2
-*** :gameid
+*** Return hashmap: {:gameId :gameState}
+** GET /api/joinGame/{gameId} NEXT 2
 *** Business logic
 **** If game is full, return 401 status. "Game is unavailable."
 **** Otherwise, generate condition cards for joining player.
 * Ring Middleware
-** Validate the playerId is the current player
+** Validate the player in the request is the current player
 ** When sending information to the clients, send only "visible" information
 *** Don't send the action cards in the deck
 *** Don't send the other player's condition cards
 * Client
-** send playerId and gameid with every request
+** send player (:color-player or :shape-player keyword) and gameId with every request
