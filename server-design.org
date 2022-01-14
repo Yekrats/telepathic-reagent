@@ -1,6 +1,8 @@
 * State Management
 ** remove :actionConfirmed from state
 ** Server state
+{:gameid
+:gamestate
 {:color-player
 :shape-player
 :board
@@ -8,7 +10,7 @@
 :selected-action
 :current-player
 :declarations
-:actionLocation}
+:actionLocation}}
 * Endpoints
 ** POST /api/selectAction
 *** body
@@ -33,7 +35,20 @@
 **** :current-player
 **** :action-location
 *** Return state
+** GET /api/startGame NEXT 1
+*** Update state
+**** Generate a  new game & add it to the global state
+***** Return the gameid and its state
+***** Assigns condition cards to the starting player (randomly color or shape player)
+** GET /api/joinGame NEXT 2
+*** :gameid
+*** Business logic
+**** If game is full, return 401 status. "Game is unavailable."
+**** Otherwise, generate condition cards for joining player.
 * Ring Middleware
 ** Validate the playerId is the current player
+** When sending information to the clients, send only "visible" information
+*** Don't send the action cards in the deck
+*** Don't send the other player's condition cards
 * Client
-** send playerId with every request
+** send playerId and gameid with every request
